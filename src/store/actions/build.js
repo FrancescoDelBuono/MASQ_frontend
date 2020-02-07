@@ -238,4 +238,11 @@ export const modelChangeRunDB = (runDB) => {
     }
 };
 
+export const builderSet = (scenario) => {
+    return {
+        type: actionTypes.BUILDER_SET,
+        scenario: scenario,
+    }
+};
+
 

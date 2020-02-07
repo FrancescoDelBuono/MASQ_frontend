@@ -9,7 +9,7 @@ import {Layout, Row, Col, Steps, Button, Divider, message,} from 'antd';
 import DatasetForm from "../components/DatasetForm";
 import ModalityForm from "../components/ModalityForm";
 import ModelForm from "../components/ModelForm";
-import Popup from "./Popup";
+import Popup from "./ExecutionPopup";
 
 const {Content} = Layout;
 const {Step} = Steps;

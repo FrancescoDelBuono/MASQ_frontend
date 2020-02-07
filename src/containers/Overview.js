@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux';
 
 import * as itemsActions from '../store/actions/items';
-import * as buildActions from '../store/actions/build';
-
 
 import {Layout, Descriptions, Badge} from 'antd';
 
@@ -22,11 +20,12 @@ class Overview extends Component {
                         <Descriptions.Item label="Table" span={1}>{this.props.table}</Descriptions.Item>}
 
                         {this.props.isDB === false &&
-                        <Descriptions.Item label="File" span={3}>{this.props.dataset[0].name}</Descriptions.Item>}
+                        <Descriptions.Item label="File" span={3}>
+                            {this.props.dataset ? this.props.dataset[0].name : 'this.props.dataset[0].name'}
+                        </Descriptions.Item>}
 
                         {this.props.isDB === null &&
                         <Descriptions.Item label="" span={3}>no database is selected</Descriptions.Item>}
-
 
 
                         <Descriptions.Item label="Mode">{this.props.mode}</Descriptions.Item>
@@ -46,7 +45,8 @@ class Overview extends Component {
                                     <Badge status="default" text="No"/>
                             }
                         </Descriptions.Item>
-                        <Descriptions.Item label="Model">{this.props.model ? this.props.model : 'no model selected'}</Descriptions.Item>
+                        <Descriptions.Item
+                            label="Model">{this.props.model ? this.props.model : 'no model selected'}</Descriptions.Item>
                         <Descriptions.Item label="Transforms">
                             {
                                 this.props.transforms &&

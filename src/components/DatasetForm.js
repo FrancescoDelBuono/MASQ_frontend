@@ -16,10 +16,6 @@ import {
     message
 } from 'antd';
 
-function hasErrors(fieldsError) {
-    return false;
-    // return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
 
 class DatasetForm extends Component {
 
@@ -69,30 +65,6 @@ class DatasetForm extends Component {
         return false;
     };
 
-    uploadFileForm = e => {
-        console.log('Upload file event:', e);
-        let fileList = [...e.fileList];
-        if (fileList.length === 0) {
-            return null;
-        }
-        fileList = fileList.slice(-1);
-        return fileList;
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-                if (values['uploaded_file']) {
-                    this.props.datasetUpload(values['uploaded_file'])
-                } else if (values['select']) {
-                    this.props.datasetSelectTable(values['select'])
-                }
-            }
-        });
-    };
-
     checkDBConnection = e => {
         let dbUrl = this.props.form.getFieldValue('db_url');
         console.log('Check connection:', dbUrl);
@@ -102,7 +74,7 @@ class DatasetForm extends Component {
     };
 
     render() {
-        const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} = this.props.form;
+        const {getFieldDecorator} = this.props.form;
 
         let errorMessage = null;
         if (this.props.error) {

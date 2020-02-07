@@ -15,7 +15,6 @@ const initialState = {
     mode: 'train',
     labelsType: null,
     labels: null,
-    validation: 0,
 
     modelsList: [],
     transformsList: [],
@@ -170,6 +169,32 @@ const modelChangeRunDB = (state, action) => {
     });
 };
 
+const builderSet = (state, action) => {
+    return updateObject(state, {
+        isDB: action.scenario.isDB,
+        dataset: action.scenario.dataset,
+        dbUrl: action.scenario.dbUrl,
+        tables: action.scenario.tables,
+
+        table: action.scenario.table,
+        columns: action.scenario.columns,
+
+        error: null,
+        loading: false,
+
+        mode: action.scenario.mode,
+        labelsType: action.scenario.labelsType,
+        labels: action.scenario.labels,
+
+        model: action.scenario.model,
+        transforms: action.scenario.transforms,
+
+        pipeline: action.scenario.pipeline,
+        runDB: action.scenario.runDB,
+    });
+};
+
+
 // REDUCER
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -213,6 +238,8 @@ const reducer = (state = initialState, action) => {
             return modelRemovePipeline(state, action);
         case actionTypes.MODEL_CHANGE_RUN_DB:
             return modelChangeRunDB(state, action);
+        case actionTypes.BUILDER_SET:
+            return builderSet(state, action);
         default:
             return state;
     }
