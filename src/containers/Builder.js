@@ -10,6 +10,8 @@ import DatasetForm from "../components/DatasetForm";
 import ModalityForm from "../components/ModalityForm";
 import ModelForm from "../components/ModelForm";
 import Popup from "./ExecutionPopup";
+import axios from "axios";
+import {config} from "../Constants";
 
 const {Content} = Layout;
 const {Step} = Steps;
@@ -55,6 +57,53 @@ class Builder extends Component {
         this.setState({current});
     }
 
+    executeBuilder() {
+
+        let dataset = this.props.dataset ? this.props.dataset[0].name : null;
+        let labels = this.props.labels;
+        if (this.props.labelsType === 'file')
+            labels = labels[0].name;
+
+        let pipeline = this.props.pipeline ? this.props.pipeline[0].name : null;
+
+        axios
+            .post('http://' + config.url.API_URL +
+                `/api/msp/scenario/`,
+                {
+                    is_db: this.props.isDB,
+                    dataset: dataset,
+                    db_url: this.props.dbUrl,
+                    table: this.props.table,
+
+                    mode: this.props.mode,
+                    validation: this.props.validation,
+                    metric: this.props.metric,
+                    labels_type: this.props.labelsType,
+                    labels: labels,
+
+                    model: this.props.model,
+                    transforms: this.props.transforms,
+                    pipeline: pipeline,
+                    run_db: this.props.runDB,
+                }
+                ,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+            .then(res => {
+                console.log('Upload dataset', res);
+                message.success('Processing complete!')
+                this.props.openPopup('result')
+            })
+            .catch(err => {
+                console.error(err.data);
+                message.error('WRONG! ERROR!')
+            });
+    }
+
     render() {
         const {current} = this.state;
 
@@ -96,8 +145,9 @@ class Builder extends Component {
                             <Col span={4} offset={16} style={{textAlign: 'right'}}>
                                 {current === steps.length - 1 && (
                                     <Button type="primary" onClick={() => {
-                                        message.success('Processing complete!')
-                                        this.props.openPopup('result')
+                                        this.executeBuilder()
+                                        // message.success('Processing complete!')
+                                        // this.props.openPopup('result')
                                     }}>
                                         Execute
                                     </Button>
@@ -110,7 +160,7 @@ class Builder extends Component {
                         </Row>
                     </div>
                 </div>
-                <Popup />
+                <Popup/>
             </Content>
         );
     }
@@ -118,7 +168,23 @@ class Builder extends Component {
 
 const mapStateToProps = state => {
     return {
-        item: state.items.item,
+        isDB: state.build.isDB,
+        dataset: state.build.dataset,
+        dbUrl: state.build.dbUrl,
+        tables: state.build.tables,
+        table: state.build.table,
+        columns: state.build.columns,
+
+        mode: state.build.mode,
+        validation: state.build.validation,
+        metric: state.build.metric,
+        labelsType: state.build.labelsType,
+        labels: state.build.labels,
+
+        model: state.build.model,
+        transforms: state.build.transforms,
+        pipeline: state.build.pipeline,
+        runDB: state.build.runDB,
     }
 };
 

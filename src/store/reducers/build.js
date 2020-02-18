@@ -15,6 +15,8 @@ const initialState = {
     mode: 'train',
     labelsType: null,
     labels: null,
+    validation: 0,
+    metric: null,
 
     modelsList: [],
     transformsList: [],
@@ -76,22 +78,41 @@ const datasetFail = (state, action) => {
 };
 
 // MODALITY reducers
+const modalityStart = (state, action) => {
+    return updateObject(state, {error: null, loading: true});
+};
+
+const modalityFail = (state, action) => {
+    return updateObject(state, {
+        error: action.error,
+        loading: false,
+    });
+};
+
+const modalitySetLabelsSuccess = (state, action) => {
+    return updateObject(state, {
+        error: null,
+        loading: false,
+        labelsType: action.labelsType,
+        labels: action.labels
+    });
+};
+
 const modalityChangeMode = (state, action) => {
     return updateObject(state, {
         mode: action.mode,
     });
 };
 
-const modalitySetLabels = (state, action) => {
-    return updateObject(state, {
-        labelsType: action.labelsType,
-        labels: action.labels
-    });
-};
-
 const modalitySetValidation = (state, action) => {
     return updateObject(state, {
         validation: action.validation,
+    });
+};
+
+const modalitySetMetric = (state, action) => {
+    return updateObject(state, {
+        metric: action.metric,
     });
 };
 
@@ -114,6 +135,7 @@ const modelGetModelsSuccess = (state, action) => {
     return updateObject(state, {
         modelsList: action.modelsList,
         loading: false,
+        error: null,
     });
 };
 
@@ -121,6 +143,7 @@ const modelGetTransformsSuccess = (state, action) => {
     return updateObject(state, {
         transformsList: action.transformsList,
         loading: false,
+        error: null,
     });
 };
 
@@ -138,7 +161,7 @@ const modelSetTransforms = (state, action) => {
 
 const modelAddTransform = (state, action) => {
     return updateObject(state, {
-        transforms: [...state.transforms ,...action.transform],
+        transforms: [...state.transforms, ...action.transform],
     });
 };
 
@@ -151,9 +174,11 @@ const modelRemoveTransform = (state, action) => {
     });
 };
 
-const modelUploadPipeline = (state, action) => {
+const modelUploadPipelineSuccess = (state, action) => {
     return updateObject(state, {
         pipeline: action.pipeline,
+        loading: false,
+        error: null
     });
 };
 
@@ -210,12 +235,18 @@ const reducer = (state = initialState, action) => {
             return datasetSelectTableSuccess(state, action);
         case actionTypes.DATASET_FAIL:
             return datasetFail(state, action);
+        case actionTypes.MODALITY_START:
+            return modalityStart(state, action);
+        case actionTypes.MODALITY_FAIL:
+            return modalityFail(state, action);
+        case actionTypes.MODALITY_SET_LABELS_SUCCESS:
+            return modalitySetLabelsSuccess(state, action);
         case actionTypes.MODALITY_CHANGE_MODE:
             return modalityChangeMode(state, action);
-        case actionTypes.MODALITY_SET_LABELS:
-            return modalitySetLabels(state, action);
         case actionTypes.MODALITY_SET_VALIDATION:
             return modalitySetValidation(state, action);
+        case actionTypes.MODALITY_SET_METRIC:
+            return modalitySetMetric(state, action);
         case actionTypes.MODEL_START:
             return modelStart(state, action);
         case actionTypes.MODEL_FAIL:
@@ -232,8 +263,8 @@ const reducer = (state = initialState, action) => {
             return modelAddTransform(state, action);
         case actionTypes.MODEL_REMOVE_TRANSFORM:
             return modelRemoveTransform(state, action);
-        case actionTypes.MODEL_UPLOAD_PIPELINE:
-            return modelUploadPipeline(state, action);
+        case actionTypes.MODEL_UPLOAD_PIPELINE_SUCCESS:
+            return modelUploadPipelineSuccess(state, action);
         case actionTypes.MODEL_REMOVE_PIPELINE:
             return modelRemovePipeline(state, action);
         case actionTypes.MODEL_CHANGE_RUN_DB:

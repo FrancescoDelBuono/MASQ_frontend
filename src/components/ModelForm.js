@@ -3,7 +3,7 @@ import '../App.css';
 import {connect} from 'react-redux';
 
 import * as buildActions from '../store/actions/build';
-import {Form, Button, Select, Upload, Switch, Tooltip, Icon,} from "antd";
+import {Form, Button, Select, Upload, Switch, InputNumber, Tooltip, Icon,} from "antd";
 
 let id = 0;
 
@@ -58,8 +58,8 @@ class ModelForm extends Component {
                 let transforms = [];
                 for (let i = 0; i < typesList.length; i++) {
                     transforms.push({
-                        'type': typesList[i],
-                        'column': columnsList[i],
+                        'transform_type': typesList[i],
+                        'transform_column': columnsList[i],
                     })
                 }
                 this.props.modelSetTransforms(transforms)
@@ -176,11 +176,11 @@ class ModelForm extends Component {
                         this.props.mode === 'test' &&
                         <Form.Item label="Upload Fitted Model">
                             <Upload fileList={this.props.pipeline}
-                                    onRemove={(e) => {
+                                    onRemove={() => {
                                         this.props.modelRemovePipeline();
                                     }}
                                     beforeUpload={file => {
-                                        this.props.modelUploadPipeline([file]);
+                                        this.props.modelUploadPipeline(file);
                                         return false;
                                     }}>
                                 <Button>
@@ -192,6 +192,7 @@ class ModelForm extends Component {
 
                     {
                         this.props.mode === 'test' &&
+                        this.props.isDB === true &&
                         <Form.Item label="Run On DB">
                             <Switch
                                 checkedChildren={<Icon type="check"/>}
@@ -204,18 +205,32 @@ class ModelForm extends Component {
 
                     {
                         this.props.mode === 'test' &&
-                        <Form.Item  label="Fast Test">
-                            <Tooltip placement="right"
-                                     title="Test between Query on DBMS and ML Library">
-                                <Button
-                                    onClick={() => console.log('perform test on chunk of 10000')}
-                                    icon="rocket"
-                                    shape="circle"
-                                    size="large"
-                                />
-                            </Tooltip>
+                        <div>
+                            <Form.Item label="Fast Test">
+                                {getFieldDecorator('batch_size', {initialValue: 1000})(<InputNumber min={1}/>)}
+                                <span className="ant-form-text"> Batch Size</span>
+                                {getFieldDecorator('batch_number', {initialValue: 5})(<InputNumber min={1}/>)}
+                                <span className="ant-form-text"> Batch Number</span>
+                            </Form.Item>
+                            <Form.Item {...formItemLayoutWithOutLabel}>
+                                <Tooltip placement="right"
+                                         title="Test between Query on DBMS and ML Library">
+                                    <Button
+                                        icon="rocket"
+                                        onClick={() => {
+                                            const {form} = this.props;
+                                            const batch_size = form.getFieldValue('batch_size');
+                                            const batch_number = form.getFieldValue('batch_number');
 
-                        </Form.Item>
+                                            console.log('perform fast test with batch size ',
+                                                batch_size, ' and batch number ', batch_number);
+                                        }}
+                                        shape="circle"
+                                        size="large"
+                                    />
+                                </Tooltip>
+                            </Form.Item>
+                        </div>
                     }
 
                 </Form>
@@ -230,6 +245,7 @@ const WrappedModelForm = Form.create({name: 'model_form'})(ModelForm);
 const mapStateToProps = state => {
     return {
         columns: state.build.columns,
+        isDB: state.build.isDB,
         mode: state.build.mode,
 
         modelsList: state.build.modelsList,

@@ -14,13 +14,60 @@ import {
     Row, Col,
     Icon,
 } from 'antd';
+import axios from "axios";
+import {config} from "../Constants";
 
 
 class ModalityForm extends Component {
 
+    state = {
+        metricsList: []
+    };
+
     componentDidMount() {
         this.props.form.validateFields();
+        this.getMetricsTypes()
     }
+
+    getMetricsTypes = () => {
+        axios
+            .get('http://' + config.url.API_URL +
+                `/api/msp/mlmanager/`,
+                {'type': 'metric'},
+                {
+                    headers: {
+                        'content-type': 'application/json',
+                    }
+                }
+            )
+            .then(res => {
+                console.log('get metric types success', res);
+                // let transforms = ['one_hot_encoding', 'normalization'];
+                this.setState({metricsList: res.data.metric_types});
+            })
+            .catch(err => {
+                console.error(err.data);
+            });
+
+    };
+
+    beforeLabelUpload = file => {
+        console.log('Get Label file:', file);
+        let labels_type = this.props.form.getFieldValue('labels_type');
+        this.props.modalitySetLabels(labels_type, file);
+        return false;
+    };
+
+    onChangeLabelsType = (event) => {
+        console.log(event)
+        console.log(typeof (event))
+        console.log(null)
+        console.log(event === null)
+        if (event === null) {
+            console.log('set null')
+            this.props.modalitySetLabels(null, null)
+        }
+    };
 
     render() {
         const {getFieldDecorator, getFieldValue} = this.props.form;
@@ -65,11 +112,17 @@ class ModalityForm extends Component {
                     <Form.Item label="Labels Type">
                         {getFieldDecorator('labels_type', {
                             initialValue: this.props.labelsType,
+                            onChange: this.onChangeLabelsType,
                         })(
                             <Select placeholder="Please select a modality" style={{width: 160}}>
+                                {this.props.mode === 'test' &&
+                                <Select.Option value={null}>no labels</Select.Option>}
+
                                 <Select.Option value="file">file</Select.Option>
+
                                 {this.props.columns &&
                                 <Select.Option value="column">column</Select.Option>}
+
                                 {this.props.isDB &&
                                 <Select.Option value="table">table</Select.Option>}
                             </Select>
@@ -83,10 +136,8 @@ class ModalityForm extends Component {
                                     onRemove={(e) => {
                                         return false
                                     }}
-                                    beforeUpload={file => {
-                                        this.props.modalitySetLabels(getFieldValue('labels_type'), [file]);
-                                        return false;
-                                    }}>
+                                    beforeUpload={this.beforeLabelUpload}
+                            >
                                 <Button>
                                     <Icon type="upload"/> Select File
                                 </Button>
@@ -161,6 +212,18 @@ class ModalityForm extends Component {
                             </Row>
                         </Form.Item>
                     }
+
+                    <Form.Item label="Metric Types">
+                        <Select placeholder="Select an evaluation metrics"
+                                defaultValue={this.props.metric}
+                                onChange={(event) => this.props.modalitySetMetric(event)}
+                                style={{width: 160}}>
+                            {this.state.metricsList.map(x => {
+                                return <Select.Option key={x} value={x}>{x}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+
                 </Form>
             </div>
         );
@@ -173,6 +236,7 @@ const mapStateToProps = state => {
     return {
         mode: state.build.mode,
         validation: state.build.validation,
+        metric: state.build.metric,
         labelsType: state.build.labelsType,
         labels: state.build.labels,
 
@@ -187,6 +251,7 @@ const mapDispatchToProps = dispatch => {
         modalityChangeMode: (mode) => dispatch(buildActions.modalityChangeMode(mode)),
         modalitySetLabels: (labelsType, labels) => dispatch(buildActions.modalitySetLabels(labelsType, labels)),
         modalitySetValidation: (value) => dispatch(buildActions.modalitySetValidation(value)),
+        modalitySetMetric: (metric) => dispatch(buildActions.modalitySetMetric(metric)),
     }
 };
 

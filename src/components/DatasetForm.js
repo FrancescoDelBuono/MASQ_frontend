@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
+import axios from 'axios';
 import {connect} from 'react-redux';
 
 import * as buildActions from '../store/actions/build';
+import {config} from '../Constants';
 
 import {
     Form,
@@ -19,9 +21,56 @@ import {
 
 class DatasetForm extends Component {
 
+    state = {};
+
     componentDidMount() {
         this.props.form.validateFields();
+        // this.get_file();
     }
+
+
+    download_file = () => {
+        axios
+            .get('http://' + config.url.API_URL + `/api/msp/document/bilke_sharing_with_label.csv/`)
+            .then(res => {
+                console.log(res);
+                let element = document.createElement('a');
+                element.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(res.data));
+                element.setAttribute('download', 'bilke_sharing_with_label.csv');
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
+
+
+            })
+            .catch(err => {
+                console.error(err.data);
+            });
+    };
+
+    get_file = () => {
+        axios
+            .get('http://' + config.url.API_URL + `/api/msp/document/bilke_sharing_with_label.csv/`)
+            .then(res => {
+                console.log(res);
+                // console.log(res['data']);
+                let s = res.data;
+                let blob = new Blob([JSON.stringify(s, null, 2)],
+                    {type: 'application/json'});
+                let file = new File([blob], 'test')
+                file['uid'] = 'rc-123456789';
+
+                this.props.datasetUpload([file]);
+
+            })
+            .catch(err => {
+                console.error(err.data);
+            });
+    };
 
     handleUpload = () => {
         const {fileList} = this.state;
@@ -43,25 +92,13 @@ class DatasetForm extends Component {
     };
 
     onRemove = file => {
-        console.log('Remove file:', file)
+        console.log('Remove file:', file);
         this.props.datasetRemoveUpload();
-        // this.setState(state => {
-        //     const index = state.fileList.indexOf(file);
-        //     const newFileList = state.fileList.slice();
-        //     newFileList.splice(index, 1);
-        //     return {
-        //         fileList: newFileList,
-        //     };
-        // });
     };
 
     beforeUpload = file => {
-        // console.log('Get file:', file)
-        // this.setState(state => ({
-        //     fileList: [file],
-        // }));
         console.log('Get file:', file);
-        this.props.datasetUpload([file]);
+        this.props.datasetUpload(file);
         return false;
     };
 
@@ -113,17 +150,6 @@ class DatasetForm extends Component {
                             <Row type="flex" justify="center" align="top">
                                 <Col span={9}>
                                     <Form.Item label="Option 1: Upload Dataset">
-                                        {/*{getFieldDecorator('uploaded_file', {*/}
-                                        {/*    valuePropName: 'fileList',*/}
-                                        {/*    getValueFromEvent: this.uploadFileForm,*/}
-                                        {/*    initialValue: this.props.dataset,*/}
-                                        {/*})(*/}
-                                        {/*    <Upload beforeUpload={this.beforeUpload}>*/}
-                                        {/*        <Button>*/}
-                                        {/*            <Icon type="upload"/> Select File*/}
-                                        {/*        </Button>*/}
-                                        {/*    </Upload>,*/}
-                                        {/*)}*/}
                                         <Upload fileList={this.props.dataset} onRemove={this.onRemove}
                                                 beforeUpload={this.beforeUpload}>
                                             <Button>
@@ -160,7 +186,7 @@ class DatasetForm extends Component {
                                                     placeholder="Please select the table"
                                                     onChange={
                                                         (value) =>
-                                                            this.props.datasetSelectTable(value)}
+                                                            this.props.datasetSelectTable(this.props.dbUrl, value)}
                                             >
                                                 {this.props.tables.map(x => {
                                                     return <Select.Option key={x} value={x}>{x}</Select.Option>
@@ -199,7 +225,7 @@ const mapDispatchToProps = dispatch => {
         datasetUpload: (file) => dispatch(buildActions.datasetUpload(file)),
         datasetRemoveUpload: () => dispatch(buildActions.datasetRemoveUpload()),
         datasetCheckUrl: (url) => dispatch(buildActions.datasetCheckUrl(url)),
-        datasetSelectTable: (table) => dispatch(buildActions.datasetSelectTable(table)),
+        datasetSelectTable: (url, table) => dispatch(buildActions.datasetSelectTable(url, table)),
     }
 };
 

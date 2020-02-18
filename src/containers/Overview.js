@@ -31,8 +31,21 @@ class Overview extends Component {
                         <Descriptions.Item label="Mode">{this.props.mode}</Descriptions.Item>
                         {this.props.labelsType &&
                         <Descriptions.Item label="Labels Type">{this.props.labelsType}</Descriptions.Item>}
-                        {this.props.labelsType &&
-                        <Descriptions.Item label="Labels">{this.props.labels}</Descriptions.Item>}
+
+                        {this.props.labelsType === 'file' &&
+                        <Descriptions.Item label="Labels">
+                            {this.props.labels ? this.props.labels[0].name : 'this.props.dataset[0].name'}
+                        </Descriptions.Item>}
+
+                        {this.props.labelsType === 'column' &&
+                        <Descriptions.Item label="Labels">
+                            {this.props.labels}
+                        </Descriptions.Item>}
+
+                        {this.props.labelsType === 'table' &&
+                        <Descriptions.Item label="Labels">
+                            {this.props.labels}
+                        </Descriptions.Item>}
 
                         {this.props.labelsType === null &&
                         <Descriptions.Item label="Labels" span={2}>no labels</Descriptions.Item>}
