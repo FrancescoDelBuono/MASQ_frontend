@@ -1,12 +1,18 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux';
 
-import * as buildActions from '../store/actions/build';
-
 import {Layout, List, Button} from 'antd';
 
-import ScenarioCard from '../components/ScenarioCard'
+import axios from "axios";
+
+import * as buildActions from '../store/actions/build';
 import * as itemsActions from "../store/actions/items";
+import * as navActions from "../store/actions/nav";
+
+import {config} from "../Constants";
+
+import ComparePopup from "./ComparePopup";
+import ScenarioCard from '../components/ScenarioCard'
 
 const {Content} = Layout;
 
@@ -29,8 +35,46 @@ class History extends Component {
     getScenarios = () => {
         console.log("get available scenarios");
         let scenarios = [];
+
+        axios
+            .get('http://' + config.url.API_URL +
+                `/api/msp/scenario/list/`)
+            .then(res => {
+                // console.log(res.data);
+                let array = res.data;
+                array.forEach(function (item, index) {
+                    console.log(item, index);
+                    scenarios.push({
+                        id: item.id,
+                        isDB: item.is_db,
+                        dbUrl: item.db_url,
+                        table: item.table,
+                        dataset: item.dataset,
+
+                        tables: item.tables,
+                        columns: item.columns,
+
+                        mode: item.mode,
+                        labelsType: item.labelsType,
+                        labels: item.labels,
+
+                        transforms: item.transforms,
+                        model: item.model,
+                        runDB: item.run_db,
+                        pipeline: item.pipeline,
+                    })
+                });
+                this.setState({scenarios});
+            })
+            .catch(err => {
+                console.error(err.data);
+            });
+    };
+
+    getFakeScenarios = () => {
+        let scenarios = [];
         scenarios.push({
-            key: 1,
+            id: 1,
             isDB: true,
             dbUrl: 'mysql://connection',
             table: 'People',
@@ -52,7 +96,7 @@ class History extends Component {
 
 
         scenarios.push({
-            key: 2,
+            id: 2,
             isDB: true,
             dbUrl: 'mysql://connection',
             table: 'People',
@@ -74,7 +118,7 @@ class History extends Component {
 
 
         scenarios.push({
-            key: 3,
+            id: 3,
             isDB: true,
             dbUrl: 'mssql://connection',
             table: 'People',
@@ -94,7 +138,7 @@ class History extends Component {
         });
 
         scenarios.push({
-            key: 4,
+            id: 4,
             isDB: false,
             dbUrl: null,
             table: null,
@@ -114,7 +158,7 @@ class History extends Component {
         });
 
         scenarios.push({
-            key: 5,
+            id: 5,
             isDB: true,
             dbUrl: 'dbms://connection',
             table: 'People',
@@ -141,13 +185,27 @@ class History extends Component {
         let data = this.state.scenarios;
         let i;
         for (i = 0; i < data.length; ++i) {
-            if (data[i].key === idx)
+            if (data[i].id === idx)
                 break
         }
         if (i < data.length)
             data.splice(i, 1);
         this.setState({scenarios: data});
 
+        axios
+            .delete('http://' + config.url.API_URL +
+                `/api/msp/scenario/?id=${idx}`)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.error(err.data);
+            });
+    };
+
+    selectScenario = (s) => {
+        this.props.builderSet(s);
+        this.props.selectItem();
     };
 
     changeCompareList = (value, idx) => {
@@ -164,6 +222,11 @@ class History extends Component {
 
     showResult = () => {
         console.log(this.state.compareList);
+        if (this.state.compareScenario && this.state.compareList.length >= 2)
+            this.props.openComparePopup(this.state.compareList);
+            this.setState({
+                compareList: [],
+            })
     };
 
     render() {
@@ -173,12 +236,9 @@ class History extends Component {
                 <ScenarioCard
                     scenario={x}
                     compareScenario={this.state.compareScenario}
-                    selectScenario={() => {
-                        this.props.builderSet(x);
-                        this.props.selectItem();
-                    }}
+                    selectScenario={() => this.selectScenario(x)}
                     removeScenario={(id) => this.removeScenario(id)}
-                    changeScenarioCompare={(value, key) => this.changeCompareList(value, key)}
+                    changeScenarioCompare={(value, id) => this.changeCompareList(value, id)}
                 />
             );
         });
@@ -210,6 +270,7 @@ class History extends Component {
                           )}
                     />
                 </div>
+                <ComparePopup />
             </Content>
         );
     }
@@ -225,6 +286,7 @@ const mapDispatchToProps = dispatch => {
     return {
         builderSet: (scenario) => dispatch(buildActions.builderSet(scenario)),
         selectItem: () => dispatch(itemsActions.selectItem('pipeline')),
+        openComparePopup: (idScenarios) => dispatch(navActions.openComparePopup(idScenarios)),
     }
 };
 

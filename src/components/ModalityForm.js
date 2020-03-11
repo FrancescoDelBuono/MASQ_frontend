@@ -215,9 +215,11 @@ class ModalityForm extends Component {
 
                     <Form.Item label="Metric Types">
                         <Select placeholder="Select an evaluation metrics"
-                                defaultValue={this.props.metric}
+                                // defaultValue={this.props.metric}
                                 onChange={(event) => this.props.modalitySetMetric(event)}
-                                style={{width: 160}}>
+                                style={{width: 160}}
+                                value={this.props.metric}
+                        >
                             {this.state.metricsList.map(x => {
                                 return <Select.Option key={x} value={x}>{x}</Select.Option>
                             })}

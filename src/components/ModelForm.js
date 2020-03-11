@@ -3,14 +3,18 @@ import '../App.css';
 import {connect} from 'react-redux';
 
 import * as buildActions from '../store/actions/build';
-import {Form, Button, Select, Upload, Switch, InputNumber, Tooltip, Icon,} from "antd";
+import * as navActions from '../store/actions/nav';
+
+import {Form, Button, Select, Upload, Switch, InputNumber, Checkbox, Tag, Icon, message,} from "antd";
+import axios from "axios";
+import {config} from "../Constants";
 
 let id = 0;
 
 class ModelForm extends Component {
 
     state = {
-        transformsInitialState: {}
+        transformsInitialState: {},
     };
 
     componentDidMount() {
@@ -65,6 +69,31 @@ class ModelForm extends Component {
                 this.props.modelSetTransforms(transforms)
             }
         });
+    };
+
+    get_pipeline = (file) => {
+        axios
+            .get('http://' + config.url.API_URL +
+                `/api/msp/pipeline/${file.name}/`)
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                this.props.modelSetModel(res.data['model']);
+                let transforms = [];
+                res.data['transforms'].forEach(k => {
+                    k['transform_features'].forEach(item => {
+                        transforms.push({
+                            'transform_type': k['transform_name'],
+                            'transform_column': item,
+                        })
+                    });
+                });
+                this.props.modelSetTransforms(transforms);
+            })
+            .catch(err => {
+                console.error(err.data);
+                message.error('Impossible read pipeline')
+            });
     };
 
     render() {
@@ -141,35 +170,63 @@ class ModelForm extends Component {
             </Form.Item>
         ));
 
+        const transformItemsReadOnly = this.props.transforms.map((k, index) => (
+            <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? 'Transforms' : ''}
+                key={index}
+            >
+                <span style={{width: '50%', marginRight: 8}}>
+                    {k['transform_type']}
+                </span>
+                <span style={{width: '40%', marginRight: 8}}>
+                    {k['transform_column']}
+                </span>
+            </Form.Item>
+        ));
+
         return (
             <div style={{width: '100%', height: '100%'}}>
                 <Form {...formItemLayout}>
 
-                    {transformItems}
-                    <Form.Item {...formItemLayoutWithOutLabel}>
-                        <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
-                            <Icon type="plus"/> Add field
-                        </Button>
-                    </Form.Item>
-                    <Form.Item {...formItemLayoutWithOutLabel}>
-                        <Button type="primary" onClick={this.saveTransforms}>
-                            Save
-                        </Button>
-                    </Form.Item>
+                    {
+                        this.props.mode === 'train' ?
+                            <div>
+                                {transformItems}
+                                <Form.Item {...formItemLayoutWithOutLabel}>
+                                    <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
+                                        <Icon type="plus"/> Add field
+                                    </Button>
+                                </Form.Item>
+                                <Form.Item {...formItemLayoutWithOutLabel}>
+                                    <Button type="primary" onClick={this.saveTransforms}>
+                                        Save
+                                    </Button>
+                                </Form.Item>
+                            </div>
+                            :
+                            <div>
+                                {transformItemsReadOnly}
+                            </div>
+                    }
 
                     <Form.Item label="Model">
-                        <Select defaultValue={this.props.model}
-                                placeholder="Please select the model"
-                                style={{width: '60%'}}
-                                onChange={
-                                    (value) =>
-                                        this.props.modelSetModel(value)
-                                }
-                        >
-                            {this.props.modelsList.map(x => {
-                                return <Select.Option key={x} value={x}>{x}</Select.Option>
-                            })}
-                        </Select>
+                        {this.props.mode === 'train' ?
+                            <Select defaultValue={this.props.model}
+                                    placeholder="Please select the model"
+                                    style={{width: '60%'}}
+                                    onChange={
+                                        (value) =>
+                                            this.props.modelSetModel(value)
+                                    }
+                            >
+                                {this.props.modelsList.map(x => {
+                                    return <Select.Option key={x} value={x}>{x}</Select.Option>
+                                })}
+                            </Select>
+                            :
+                            <span>{this.props.model ? this.props.model : "no selected model"}</span>
+                        }
                     </Form.Item>
 
                     {
@@ -181,6 +238,7 @@ class ModelForm extends Component {
                                     }}
                                     beforeUpload={file => {
                                         this.props.modelUploadPipeline(file);
+                                        this.get_pipeline(file);
                                         return false;
                                     }}>
                                 <Button>
@@ -192,44 +250,65 @@ class ModelForm extends Component {
 
                     {
                         this.props.mode === 'test' &&
-                        this.props.isDB === true &&
-                        <Form.Item label="Run On DB">
+                        this.props.isDB &&
+                        !this.props.isSimulation &&
+                        <Form.Item label="Run on">
                             <Switch
                                 checkedChildren={<Icon type="check"/>}
                                 unCheckedChildren={<Icon type="close"/>}
                                 onChange={(val) => this.props.modelChangeRunDB(val)}
                                 defaultChecked={this.props.runDB}
                             />
+                            <span style={{marginLeft: 15}}>
+                                {this.props.runDB ?
+                                    <Tag color='geekblue'>QUERY ON DBMS</Tag>
+                                    :
+                                    <Tag color='green'>ML LIBRARY</Tag>
+                                }
+                            </span>
                         </Form.Item>
                     }
 
                     {
                         this.props.mode === 'test' &&
+                        this.props.isDB &&
                         <div>
-                            <Form.Item label="Fast Test">
-                                {getFieldDecorator('batch_size', {initialValue: 1000})(<InputNumber min={1}/>)}
-                                <span className="ant-form-text"> Batch Size</span>
-                                {getFieldDecorator('batch_number', {initialValue: 5})(<InputNumber min={1}/>)}
-                                <span className="ant-form-text"> Batch Number</span>
+                            <Form.Item label='Simulation'>
+                                <Checkbox
+                                    onChange={(e) => this.props.setIsSimulation(e.target.checked)}
+                                    checked={this.props.isSimulation}
+                                />
+                                {this.props.isSimulation &&
+                                <span style={{marginLeft: 15}}>Test between Query on DBMS and ML Library</span>}
                             </Form.Item>
-                            <Form.Item {...formItemLayoutWithOutLabel}>
-                                <Tooltip placement="right"
-                                         title="Test between Query on DBMS and ML Library">
-                                    <Button
-                                        icon="rocket"
-                                        onClick={() => {
-                                            const {form} = this.props;
-                                            const batch_size = form.getFieldValue('batch_size');
-                                            const batch_number = form.getFieldValue('batch_number');
+                            {
+                                this.props.isSimulation &&
+                                <div>
+                                    <Form.Item {...formItemLayoutWithOutLabel}>
+                                        <InputNumber min={1} value={this.props.batchSize}
+                                                     onChange={(e) =>
+                                                         this.props.modelSetBatchSize(e)}/>
+                                        <span className="ant-form-text"> Batch Size</span>
 
-                                            console.log('perform fast test with batch size ',
-                                                batch_size, ' and batch number ', batch_number);
-                                        }}
-                                        shape="circle"
-                                        size="large"
-                                    />
-                                </Tooltip>
-                            </Form.Item>
+                                        <InputNumber min={1} value={this.props.batchNumber}
+                                                     style={{marginLeft: 15}}
+                                                     onChange={(e) =>
+                                                         this.props.modelSetBatchNumber(e)}/>
+                                        <span className="ant-form-text"> Batch Number</span>
+                                    </Form.Item>
+                                    {/*<Form.Item {...formItemLayoutWithOutLabel}>*/}
+                                    {/*    <Tooltip placement="right"*/}
+                                    {/*             title="Test between Query on DBMS and ML Library">*/}
+                                    {/*        <Button*/}
+                                    {/*            icon="rocket"*/}
+                                    {/*            onClick={this.executeFastText}*/}
+                                    {/*            shape="circle"*/}
+                                    {/*            size="large"*/}
+                                    {/*        />*/}
+                                    {/*    </Tooltip>*/}
+                                    {/*</Form.Item>*/}
+                                </div>
+                            }
                         </div>
                     }
 
@@ -244,9 +323,15 @@ const WrappedModelForm = Form.create({name: 'model_form'})(ModelForm);
 
 const mapStateToProps = state => {
     return {
-        columns: state.build.columns,
         isDB: state.build.isDB,
+        dbUrl: state.build.dbUrl,
+        table: state.build.table,
+        columns: state.build.columns,
+
         mode: state.build.mode,
+        labelsType: state.build.labelsType,
+        labels: state.build.labels,
+
 
         modelsList: state.build.modelsList,
         transformsList: state.build.transformsList,
@@ -254,6 +339,11 @@ const mapStateToProps = state => {
         transforms: state.build.transforms,
         pipeline: state.build.pipeline,
         runDB: state.build.runDB,
+
+        batchNumber: state.build.batchNumber,
+        batchSize: state.build.batchSize,
+
+        isSimulation: state.nav.isSimulation,
     }
 };
 
@@ -266,6 +356,10 @@ const mapDispatchToProps = dispatch => {
         modelUploadPipeline: (pipeline) => dispatch(buildActions.modelUploadPipeline(pipeline)),
         modelRemovePipeline: () => dispatch(buildActions.modelRemovePipeline()),
         modelChangeRunDB: (runDB) => dispatch(buildActions.modelChangeRunDB(runDB)),
+        modelSetBatchNumber: (batchNumber) => dispatch(buildActions.modelSetBatchNumber(batchNumber)),
+        modelSetBatchSize: (batchSize) => dispatch(buildActions.modelSetBatchSize(batchSize)),
+
+        setIsSimulation: (isSimulation) => dispatch(navActions.setIsSimulation(isSimulation)),
     }
 };
 

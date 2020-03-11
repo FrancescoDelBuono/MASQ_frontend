@@ -21,9 +21,12 @@ const initialState = {
     modelsList: [],
     transformsList: [],
     model: null,
-    transforms: null,
+    transforms: [],
     pipeline: null,
     runDB: false,
+
+    batchNumber: 5,
+    batchSize: 1000,
 };
 
 // DATASET reducers
@@ -194,6 +197,18 @@ const modelChangeRunDB = (state, action) => {
     });
 };
 
+const modelSetBatchNumber = (state, action) => {
+    return updateObject(state, {
+        batchNumber: action.batchNumber,
+    });
+};
+
+const modelSetBatchSize = (state, action) => {
+    return updateObject(state, {
+        batchSize: action.batchSize,
+    });
+};
+
 const builderSet = (state, action) => {
     return updateObject(state, {
         isDB: action.scenario.isDB,
@@ -219,6 +234,32 @@ const builderSet = (state, action) => {
     });
 };
 
+const builderClear = (state, action) => {
+    return updateObject(state, initialState);
+};
+
+const builderDeploy = (state, action) => {
+
+    let isDB = state.isDB ? state.isDB : null;
+    let runDB = state.isDB;
+
+    return updateObject(state, {
+
+        isDB: isDB,
+        dataset: null,
+        table: null,
+        columns: null,
+
+        mode: 'test',
+        labels: null,
+        labelsType: null,
+        metric: null,
+
+        pipeline: action.pipeline,
+        runDB: runDB,
+
+    });
+};
 
 // REDUCER
 const reducer = (state = initialState, action) => {
@@ -269,8 +310,19 @@ const reducer = (state = initialState, action) => {
             return modelRemovePipeline(state, action);
         case actionTypes.MODEL_CHANGE_RUN_DB:
             return modelChangeRunDB(state, action);
+
+        case actionTypes.MODEL_SET_BATCH_NUMBER:
+            return modelSetBatchNumber(state, action);
+        case actionTypes.MODEL_SET_BATCH_SIZE:
+            return modelSetBatchSize(state, action);
+
         case actionTypes.BUILDER_SET:
             return builderSet(state, action);
+        case actionTypes.BUILDER_CLEAR:
+            return builderClear(state, action);
+        case actionTypes.BUILDER_DEPLOY:
+            return builderDeploy(state, action);
+
         default:
             return state;
     }

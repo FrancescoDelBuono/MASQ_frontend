@@ -3,6 +3,8 @@ import React from 'react';
 import {Badge, Card, Switch, Icon} from 'antd';
 
 import {get_background} from '../data/server_images';
+import * as navActions from "../store/actions/nav";
+import {connect} from "react-redux";
 
 
 // Single Scenario UI
@@ -16,14 +18,18 @@ const ScenarioCard = (props) => {
 
     let actions = [
         <Icon type="check" key="setting" onClick={props.selectScenario}/>,
-        <Icon type="delete" key="edit" onClick={() => props.removeScenario(props.scenario.key)}/>
+        <Icon type="info" key="setting" onClick={() => {
+            props.openPopup('result', props.scenario.id)
+        }}/>,
+        <Icon type="delete" key="edit" onClick={() => props.removeScenario(props.scenario.id)}/>
     ];
 
     if (props.compareScenario) {
-        actions.push(
-            <Switch onClick={(e) =>
-                props.changeScenarioCompare(e, props.scenario.key)}/>,
-        )
+        // actions.push(
+        //     <Switch onClick={(e) =>
+        //         props.changeScenarioCompare(e, props.scenario.key)}/>,
+        // )
+        actions = [<Switch onClick={(e) => props.changeScenarioCompare(e, props.scenario.id)}/>]
     }
 
     return (
@@ -38,9 +44,9 @@ const ScenarioCard = (props) => {
                   />}
               actions={actions}>
             <Card.Meta
-                title={'Scenario ' + props.scenario.key}
+                title={'Scenario ' + props.scenario.id}
                 description={
-                    <pre style={{width: 240}}>
+                    <pre style={{width: 240, maxWidth: 240}}>
                     {
                         props.scenario.isDB ?
                             <Badge status="processing" text="DBMS"/>
@@ -51,7 +57,8 @@ const ScenarioCard = (props) => {
                             props.scenario.isDB ?
                                 props.scenario.table
                                 :
-                                'props.scenario.dataset[0].name'
+                                // 'props.scenario.dataset[0].name'
+                                props.scenario.dataset
                         }{"\n"}
                         {props.scenario.mode}{"\n"}
                         {props.scenario.labelsType ?
@@ -72,4 +79,10 @@ const ScenarioCard = (props) => {
         </Card>);
 };
 
-export default ScenarioCard;
+const mapDispatchToProps = dispatch => {
+    return {
+        openPopup: (name, id) => dispatch(navActions.openPopup(name, id)),
+    }
+};
+
+export default connect(null, mapDispatchToProps)(ScenarioCard);

@@ -203,8 +203,9 @@ export const modalitySetLabels = (labelsType, labels) => {
             case ('table'):
                 dispatch(modalitySetLabelsSuccess(labelsType, labels));
                 break;
-            case (null):
+            case null:
                 dispatch(modalitySetLabelsSuccess(labelsType, labels));
+                dispatch(modalitySetMetric(null));
                 break;
             default:
                 dispatch(modalityFail("The selected modality isn't valid"));
@@ -393,11 +394,39 @@ export const modelChangeRunDB = (runDB) => {
     }
 };
 
+export const modelSetBatchNumber = (batchNumber) => {
+    return {
+        type: actionTypes.MODEL_SET_BATCH_NUMBER,
+        batchNumber: batchNumber,
+    }
+};
+
+export const modelSetBatchSize = (batchSize) => {
+    return {
+        type: actionTypes.MODEL_SET_BATCH_SIZE,
+        batchSize: batchSize,
+    }
+};
+
 export const builderSet = (scenario) => {
     return {
         type: actionTypes.BUILDER_SET,
         scenario: scenario,
     }
 };
+
+export const builderClear = () => {
+    return {
+        type: actionTypes.BUILDER_CLEAR,
+    }
+};
+
+export const builderDeploy = (pipeline) => {
+    return {
+        type: actionTypes.BUILDER_DEPLOY,
+        pipeline: pipeline
+    }
+};
+
 
 

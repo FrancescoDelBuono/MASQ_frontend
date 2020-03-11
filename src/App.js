@@ -9,6 +9,7 @@ import Sidepanel from './containers/Sidepanel';
 import Builder from './containers/Builder';
 import Overview from './containers/Overview';
 import History from "./containers/History";
+import Popup from "./containers/ExecutionPopup";
 
 
 const {Header, Footer} = Layout;
@@ -45,6 +46,7 @@ class App extends Component {
                     {this.props.item === 'history' && <History/>}
                     {this.props.item === 'pipeline' && <Builder/>}
                     {this.props.item === 'pipeline' && <Overview/>}
+                    <Popup/>
                     <Footer style={{textAlign: 'center'}}>Mmmmmmh......</Footer>
                 </Layout>
 
