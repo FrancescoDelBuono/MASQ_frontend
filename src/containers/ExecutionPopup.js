@@ -126,9 +126,9 @@ class PopupModal extends React.Component {
                 centered
                 visible={this.props.showPopup}
                 onCancel={this.props.closePopup}
-                width={'80%'}
+                width={'70%'}
                 bodyStyle={{
-                    minHeight: '640px'
+                    minHeight: '60%'
                 }}
                 footer={footer}
             >

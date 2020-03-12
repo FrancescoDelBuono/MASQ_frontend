@@ -7,6 +7,7 @@ import * as navActions from "../store/actions/nav";
 import axios from "axios";
 import {config} from "../Constants";
 
+
 class ComparePopupModal extends React.Component {
 
     state = {
@@ -58,21 +59,67 @@ class ComparePopupModal extends React.Component {
 
     componentDidMount() {
         console.log('componentDidMount ComparePopup: ' + this.props.idScenarios.join(', '));
-    }
+    };
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('componentDidUpdate ComparePopup');
-        console.log(this.props.idScenarios);
+        console.log('componentDidUpdate ComparePopup: ', this.props.idScenarios.join(', '));
         if (prevProps.idScenarios !== this.props.idScenarios) {
             console.log('update compare scenarios list');
-            this.setState({scenarios: {}});
+            this.setState({
+                scenarios: {},
+                columns: [{
+                    title: 'index',
+                    dataIndex: 'index',
+                    key: 'index',
+                }],
+                dataSource: [
+                    {
+                        key: '1',
+                        index: 'data',
+                    },
+                    {
+                        key: '2',
+                        index: 'table',
+                    },
+                    {
+                        key: '3',
+                        index: 'mode',
+                    },
+                    {
+                        key: '4',
+                        index: 'model',
+                    },
+                    {
+                        key: '5',
+                        index: 'transforms',
+                    },
+                    {
+                        key: '6',
+                        index: 'run db',
+                    },
+                    {
+                        key: '7',
+                        index: 'execution time',
+                    },
+                    {
+                        key: '8',
+                        index: 'throughput',
+                    },
+                    {
+                        key: '9',
+                        index: 'score',
+                    },
+                ],
+            });
+
+
             this.props.idScenarios.forEach(x => {
                 console.log('get complete scenario: ' + x);
                 this.get_complete_scenario(x);
             })
         }
-    }
+    };
 
     valueTable = text => {
         if (text === 'DBMS')
@@ -111,16 +158,20 @@ class ComparePopupModal extends React.Component {
                 });
 
                 dataSource[0][id] = res.data.is_db ? 'DBMS' : 'Dataset';
-                dataSource[1][id] = res.data.is_db ? res.data.table  : res.data.dataset;
+                dataSource[1][id] = res.data.is_db ? res.data.table : res.data.dataset;
                 dataSource[2][id] = res.data.mode;
                 dataSource[3][id] = res.data.model;
                 dataSource[4][id] = res.data.transforms ? res.data.transforms.length : 0;
                 dataSource[5][id] = res.data.run_db ? 'QUERY' : 'ML';
-                dataSource[6][id] = res.data.throughput;
-                dataSource[7][id] = res.data.execution_time;
+                dataSource[6][id] = res.data.execution_time;
+                dataSource[7][id] = res.data.throughput;;
                 dataSource[8][id] = res.data.score;
 
-                this.setState({scenarios: scenarios});
+                this.setState({
+                    scenarios: scenarios,
+                    dataSource: dataSource,
+                    columns: columns
+                });
             })
             .catch(err => {
                 console.error(err.data);
@@ -199,7 +250,8 @@ class ComparePopupModal extends React.Component {
                 onCancel={this.props.closeComparePopup}
                 width={'80%'}
                 bodyStyle={{
-                    minHeight: '640px'
+                    minHeight: '60%',
+                    // minWidth: '70%'
                 }}>
                 {/*<div>*/}
                 {/*    <h1>Results</h1>*/}

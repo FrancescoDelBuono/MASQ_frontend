@@ -221,12 +221,18 @@ class History extends Component {
     };
 
     showResult = () => {
-        console.log(this.state.compareList);
-        if (this.state.compareScenario && this.state.compareList.length >= 2)
+        console.log('show result', this.state.compareScenario);
+        if (this.state.compareScenario && this.state.compareList.length >= 2) {
+            console.log('compare', this.state.compareList)
             this.props.openComparePopup(this.state.compareList);
             this.setState({
                 compareList: [],
-            })
+            });
+        }
+        else
+            this.setState({
+                compareList: [],
+            });
     };
 
     render() {

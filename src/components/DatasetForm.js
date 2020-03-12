@@ -11,6 +11,7 @@ import {
     Upload,
     Button,
     Select,
+    AutoComplete,
     Row, Col,
     Alert,
     Spin,
@@ -169,7 +170,11 @@ class DatasetForm extends Component {
                                                     initialValue: this.props.dbUrl,
                                                 })(
                                                     <Input placeholder='database url'/>
-                                                )}
+                                                    // <AutoComplete
+                                                    //     placeholder="database url"
+                                                    //     options={[{ value: 'mysql+pymysql://root:password@localhost/MLtoSQL' },]}
+                                                    // />
+                                                    )}
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}>
