@@ -20,18 +20,6 @@ class ModelForm extends Component {
     componentDidMount() {
         this.props.modelGetModels();
         this.props.modelGetTransforms();
-
-        if (this.props.transforms) {
-            let res = {};
-            this.props.transforms.forEach(item => {
-                console.log(item);
-                res[id] = item;
-                this.add();
-            });
-            this.setState({
-                transformsInitialState: res
-            });
-        }
     }
 
     remove = k => {
@@ -57,15 +45,17 @@ class ModelForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const {keys, types, columns} = values;
-                const typesList = keys.map(key => types[key]);
-                const columnsList = keys.map(key => columns[key]);
                 let transforms = [];
-                for (let i = 0; i < typesList.length; i++) {
+                keys.map(key => {
                     transforms.push({
-                        'transform_type': typesList[i],
-                        'transform_column': columnsList[i],
-                    })
-                }
+                        'transform_type': types[key],
+                        'transform_column': columns[key],
+                    });
+
+                    this.remove(key);
+                    return key;
+                });
+
                 this.props.modelSetTransforms(transforms)
             }
         });
@@ -79,16 +69,7 @@ class ModelForm extends Component {
                 console.log(res);
                 console.log(res.data);
                 this.props.modelSetModel(res.data['model']);
-                let transforms = [];
-                res.data['transforms'].forEach(k => {
-                    k['transform_features'].forEach(item => {
-                        transforms.push({
-                            'transform_type': k['transform_name'],
-                            'transform_column': item,
-                        })
-                    });
-                });
-                this.props.modelSetTransforms(transforms);
+                this.props.modelSetTransforms(res.data['transforms']);
             })
             .catch(err => {
                 console.error(err.data);
@@ -120,7 +101,6 @@ class ModelForm extends Component {
                 validateStatus={''}
             >
                 {getFieldDecorator(`types[${k}]`, {
-                    // validateTrigger: ['onChange', 'onBlur'],
                     rules: [
                         {
                             required: true,
@@ -140,7 +120,6 @@ class ModelForm extends Component {
                     </Select>
                 )}
                 {getFieldDecorator(`columns[${k}]`, {
-                    // validateTrigger: ['onChange', 'onBlur'],
                     rules: [
                         {
                             required: true,
@@ -187,27 +166,26 @@ class ModelForm extends Component {
 
         return (
             <div style={{width: '100%', height: '100%'}}>
+                <div>
+                    {transformItemsReadOnly}
+                </div>
                 <Form {...formItemLayout}>
 
                     {
-                        this.props.mode === 'train' ?
-                            <div>
-                                {transformItems}
-                                <Form.Item {...formItemLayoutWithOutLabel}>
-                                    <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
-                                        <Icon type="plus"/> Add field
-                                    </Button>
-                                </Form.Item>
-                                <Form.Item {...formItemLayoutWithOutLabel}>
-                                    <Button type="primary" onClick={this.saveTransforms}>
-                                        Save
-                                    </Button>
-                                </Form.Item>
-                            </div>
-                            :
-                            <div>
-                                {transformItemsReadOnly}
-                            </div>
+                        this.props.mode === 'train' &&
+                        <div>
+                            {transformItems}
+                            <Form.Item {...formItemLayoutWithOutLabel}>
+                                <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
+                                    <Icon type="plus"/> Add field
+                                </Button>
+                            </Form.Item>
+                            <Form.Item {...formItemLayoutWithOutLabel}>
+                                <Button type="primary" onClick={this.saveTransforms}>
+                                    Save
+                                </Button>
+                            </Form.Item>
+                        </div>
                     }
 
                     <Form.Item label="Model">
@@ -235,6 +213,8 @@ class ModelForm extends Component {
                             <Upload fileList={this.props.pipeline}
                                     onRemove={() => {
                                         this.props.modelRemovePipeline();
+                                        this.props.modelSetModel('');
+                                        this.props.modelSetTransforms([]);
                                     }}
                                     beforeUpload={file => {
                                         this.props.modelUploadPipeline(file);
@@ -296,17 +276,6 @@ class ModelForm extends Component {
                                                          this.props.modelSetBatchNumber(e)}/>
                                         <span className="ant-form-text"> Batch Number</span>
                                     </Form.Item>
-                                    {/*<Form.Item {...formItemLayoutWithOutLabel}>*/}
-                                    {/*    <Tooltip placement="right"*/}
-                                    {/*             title="Test between Query on DBMS and ML Library">*/}
-                                    {/*        <Button*/}
-                                    {/*            icon="rocket"*/}
-                                    {/*            onClick={this.executeFastText}*/}
-                                    {/*            shape="circle"*/}
-                                    {/*            size="large"*/}
-                                    {/*        />*/}
-                                    {/*    </Tooltip>*/}
-                                    {/*</Form.Item>*/}
                                 </div>
                             }
                         </div>

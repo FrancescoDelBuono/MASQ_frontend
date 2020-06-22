@@ -25,15 +25,15 @@ class History extends Component {
         compareList: [],
     };
 
-    // initialize available scenarios
     componentDidMount() {
-        console.log("History_componentDidMount");
+        // Initialize available scenarios
+        console.log("History: componentDidMount");
         this.getScenarios();
     }
 
-    // get scenarios
     getScenarios = () => {
-        console.log("get available scenarios");
+        // Get available scenarios
+        console.log("History: get available scenarios");
         let scenarios = [];
 
         axios
@@ -43,7 +43,7 @@ class History extends Component {
                 // console.log(res.data);
                 let array = res.data;
                 array.forEach(function (item, index) {
-                    console.log(item, index);
+                    // console.log(item, index);
                     scenarios.push({
                         id: item.id,
                         isDB: item.is_db,
@@ -55,7 +55,7 @@ class History extends Component {
                         columns: item.columns,
 
                         mode: item.mode,
-                        labelsType: item.labelsType,
+                        labelsType: item.labels_type,
                         labels: item.labels,
 
                         transforms: item.transforms,
@@ -71,117 +71,9 @@ class History extends Component {
             });
     };
 
-    getFakeScenarios = () => {
-        let scenarios = [];
-        scenarios.push({
-            id: 1,
-            isDB: true,
-            dbUrl: 'mysql://connection',
-            table: 'People',
-            dataset: null,
-
-            tables: ['People', 'Animals', 'Labels'],
-            columns: ['person', 'age', 'sex'],
-
-            mode: 'test',
-            labelsType: 'table',
-            labels: 'Labels',
-
-            transforms: [{type: 'one_hot', column: 'sex'},
-                {type: 'normalisation', column: 'age'}],
-            model: 'gradient_boosting_classifier',
-            runDB: true,
-            pipeline: null
-        });
-
-
-        scenarios.push({
-            id: 2,
-            isDB: true,
-            dbUrl: 'mysql://connection',
-            table: 'People',
-            dataset: null,
-
-            tables: ['People', 'Animals'],
-            columns: ['person', 'age', 'sex'],
-
-            mode: 'train',
-            labelsType: 'file',
-            labels: null,
-
-            transforms: [{type: 'one_hot', column: 'sex'},
-                {type: 'normalisation', column: 'age'}],
-            model: 'logistic_regression',
-            runDB: false,
-            pipeline: null
-        });
-
-
-        scenarios.push({
-            id: 3,
-            isDB: true,
-            dbUrl: 'mssql://connection',
-            table: 'People',
-            dataset: null,
-
-            tables: ['People', 'Animals'],
-            columns: ['person', 'age', 'sex'],
-
-            mode: 'test',
-            labelsType: null,
-            labels: null,
-
-            transforms: null,
-            model: 'logistic_regression',
-            runDB: false,
-            pipeline: null
-        });
-
-        scenarios.push({
-            id: 4,
-            isDB: false,
-            dbUrl: null,
-            table: null,
-            dataset: null,
-
-            tables: null,
-            columns: ['temperature', 'water', 'wind'],
-
-            mode: 'test',
-            labelsType: null,
-            labels: null,
-
-            transforms: [{type: 'one_hot', column: 'temperature'}],
-            model: 'sdca_maximum_entropy',
-            runDB: false,
-            pipeline: null
-        });
-
-        scenarios.push({
-            id: 5,
-            isDB: true,
-            dbUrl: 'dbms://connection',
-            table: 'People',
-            dataset: null,
-
-            tables: ['People', 'Animals'],
-            columns: ['person', 'age', 'sex'],
-
-            mode: 'train',
-            labelsType: 'column',
-            labels: 'age',
-
-            transforms: null,
-            model: 'gradient_boosting_classifier',
-            runDB: false,
-            pipeline: null
-        });
-
-        this.setState({scenarios});
-    };
-
     removeScenario = (idx) => {
-        console.log("remove scenario ", idx);
+        // Delete the selected scenario
+        console.log("History: remove scenario ", idx);
         let data = this.state.scenarios;
         let i;
         for (i = 0; i < data.length; ++i) {
@@ -199,16 +91,20 @@ class History extends Component {
                 console.log(res);
             })
             .catch(err => {
-                console.error(err.data);
+                console.error(err);
             });
     };
 
     selectScenario = (s) => {
+        // Select scenario s and go to pipeline tab
+        console.log('History: select scenario ', s.id);
+        console.log(s);
         this.props.builderSet(s);
         this.props.selectItem();
     };
 
     changeCompareList = (value, idx) => {
+        // Modify selected item
         let list = this.state.compareList;
         let i = list.indexOf(idx);
         if (i >= 0)
@@ -220,30 +116,36 @@ class History extends Component {
         });
     };
 
-    showResult = () => {
-        console.log('show result', this.state.compareScenario);
+    showComparison = () => {
+        // Show comparison
         if (this.state.compareScenario && this.state.compareList.length >= 2) {
-            console.log('compare', this.state.compareList)
+            console.log('History: open Compare Popup ', this.state.compareList.join(', '));
             this.props.openComparePopup(this.state.compareList);
             this.setState({
                 compareList: [],
             });
-        }
-        else
+        } else
             this.setState({
                 compareList: [],
             });
     };
 
+    showDetail = (id) => {
+        // Show detail of the given scenario
+        console.log('History: show detail ', id);
+        this.props.openPopup('detail', id)
+    };
+
     render() {
 
-        let scenario_cards = this.state.scenarios.map(x => {
+        let scenarioCards = this.state.scenarios.map(x => {
             return (
                 <ScenarioCard
                     scenario={x}
-                    compareScenario={this.state.compareScenario}
+                    showDetail={this.showDetail}
+                    removeScenario={this.removeScenario}
                     selectScenario={() => this.selectScenario(x)}
-                    removeScenario={(id) => this.removeScenario(id)}
+                    compareScenario={this.state.compareScenario}
                     changeScenarioCompare={(value, id) => this.changeCompareList(value, id)}
                 />
             );
@@ -258,7 +160,7 @@ class History extends Component {
                         marginBottom: '12px'
                     }}>
                         <Button type='link' onClick={() => {
-                            this.showResult();
+                            this.showComparison();
                             this.setState({compareScenario: !this.state.compareScenario});
                         }}>
                             {this.state.compareScenario ?
@@ -268,7 +170,7 @@ class History extends Component {
                         </Button>
                     </div>
                     <List grid={{gutter: 16, xs: 1, sm: 1, md: 2, lg: 3, xl: 4, xxl: 4}}
-                          dataSource={scenario_cards}
+                          dataSource={scenarioCards}
                           renderItem={item => (
                               <List.Item>
                                   {item}
@@ -276,7 +178,7 @@ class History extends Component {
                           )}
                     />
                 </div>
-                <ComparePopup />
+                <ComparePopup/>
             </Content>
         );
     }
@@ -291,8 +193,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         builderSet: (scenario) => dispatch(buildActions.builderSet(scenario)),
+
         selectItem: () => dispatch(itemsActions.selectItem('pipeline')),
+
         openComparePopup: (idScenarios) => dispatch(navActions.openComparePopup(idScenarios)),
+        openPopup: (name, id) => dispatch(navActions.openPopup(name, id)),
     }
 };
 

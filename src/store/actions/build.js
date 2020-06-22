@@ -15,16 +15,12 @@ export const datasetUploadSuccess = (dataset, columns) => {
         type: actionTypes.DATASET_UPLOAD_SUCCESS,
         dataset: dataset,
         columns: columns,
-        isDB: false,
     }
 };
 
 export const datasetRemoveUpload = () => {
     return {
         type: actionTypes.DATASET_REMOVE_UPLOAD,
-        dataset: null,
-        columns: null,
-        isDB: null,
     }
 };
 
@@ -33,7 +29,6 @@ export const datasetCheckUrlSuccess = (dbUrl, tables) => {
         type: actionTypes.DATASET_CHECK_URL_SUCCESS,
         dbUrl: dbUrl,
         tables: tables,
-        isDB: true,
     }
 };
 
@@ -56,6 +51,7 @@ export const datasetUpload = (file) => {
     return dispatch => {
         dispatch(datasetStart());
 
+        // Upload file
         let formData = new FormData();
         formData.append("file", file);
         axios
@@ -69,9 +65,8 @@ export const datasetUpload = (file) => {
                 })
 
             .then(res => {
-                console.log('Upload dataset', res);
-                // let columns = ['age', 'sex', 'rank', 'survive'];
-
+                // Successful upload
+                // Get from columns from uploaded file
                 axios
                     .get('http://' + config.url.API_URL +
                         `/api/msp/document/${file.name}/?type=columns`,
@@ -79,18 +74,17 @@ export const datasetUpload = (file) => {
                             headers: {'content-type': 'application/json',}
                         })
                     .then(res => {
-                        console.log('Get columns ', res.data);
+                        // Successful in getting columns
                         let columns = res.data.columns;
                         dispatch(datasetUploadSuccess([file], columns));
                     })
                     .catch(err => {
-                        console.error(err.data);
+                        // Error during columns extraction
                         dispatch(datasetFail("The uploaded file isn't a dataset"));
                     });
             })
-
             .catch(err => {
-                console.error(err.data);
+                // Error during uploading file
                 dispatch(datasetFail("The uploaded file isn't valid"));
             });
     }
@@ -98,22 +92,22 @@ export const datasetUpload = (file) => {
 
 export const datasetCheckUrl = (url) => {
     return dispatch => {
+        // Check db connection url
         dispatch(datasetStart());
-        console.log(url)
         axios
-            .get('http://' + config.url.API_URL + `/api/msp/dbms/`,
+            .get(`http://${config.url.API_URL}/api/msp/dbms/`,
                 {
-                    headers: {'content-type': 'application/json',},
+                    headers: {'content-type': 'application/json'},
                     params: {'dbms_url': url}
                 }
             )
             .then(res => {
-                console.log('DBMS url is valid and get tables', res);
-                // let tables = ['people', 'banks', 'animals'];
+                // Success in create db connection
                 let tables = res.data.tables;
                 dispatch(datasetCheckUrlSuccess(url, tables));
             })
             .catch(err => {
+                // Error in testing db connection
                 console.error(err.data);
                 dispatch(datasetFail("DBMS url isn't valid"));
             });
@@ -132,14 +126,14 @@ export const datasetSelectTable = (url, table) => {
                 }
             )
             .then(res => {
-                console.log('Get columns', res);
-                // let columns = ['age', 'sex', 'rank', 'survive'];
+                // Successful in getting columns from DBMS
                 let columns = res.data.columns;
                 dispatch(datasetSelectTableSuccess(table, columns));
             })
             .catch(err => {
+                // Error in getting columns from DBMS
                 console.error(err.data);
-                dispatch(datasetFail("Error in getting columns"));
+                dispatch(datasetFail("Error in getting columns from DBMS"));
             });
     }
 };
@@ -176,8 +170,7 @@ export const modalitySetLabels = (labelsType, labels) => {
                 let formData = new FormData();
                 formData.append("file", labels);
                 axios
-                    .post('http://' + config.url.API_URL +
-                        `/api/msp/document/${labels.name}/`,
+                    .post(`http://${config.url.API_URL}/api/msp/document/${labels.name}/`,
                         formData,
                         {
                             headers: {
@@ -186,24 +179,25 @@ export const modalitySetLabels = (labelsType, labels) => {
                         })
 
                     .then(res => {
-                        console.log('Upload label file', res);
+                        // Successful label file upload
                         dispatch(modalitySetLabelsSuccess(labelsType, [labels]));
                     })
 
                     .catch(err => {
-                        console.error(err.data);
-                        console.log('The uploaded label file isn\'t valid');
+                        // Error in label file upload
                         dispatch(modalityFail("The uploaded label file isn't valid"));
                     });
-
                 break;
             case ('column'):
+                // Column label selected
                 dispatch(modalitySetLabelsSuccess(labelsType, labels));
                 break;
             case ('table'):
+                // Table label selected
                 dispatch(modalitySetLabelsSuccess(labelsType, labels));
                 break;
             case null:
+                // No label selected
                 dispatch(modalitySetLabelsSuccess(labelsType, labels));
                 dispatch(modalitySetMetric(null));
                 break;

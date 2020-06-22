@@ -1,21 +1,21 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux';
-
-import * as itemsActions from '../store/actions/items';
-import * as navActions from "../store/actions/nav";
+import axios from "axios";
 
 import {Layout, Row, Col, Steps, Button, Divider, message, Modal,} from 'antd';
-
 import DatasetForm from "../components/DatasetForm";
 import ModalityForm from "../components/ModalityForm";
 import ModelForm from "../components/ModelForm";
-import axios from "axios";
+
 import {config} from "../Constants";
+import * as itemsActions from '../store/actions/items';
+import * as navActions from "../store/actions/nav";
+
 
 const {Content} = Layout;
 const {Step} = Steps;
 
-
+const MAX_STEP = 3;
 const steps = [
     {
         title: 'Dataset',
@@ -44,72 +44,95 @@ class Builder extends Component {
     }
 
     onChange = current => {
-        console.log('onChange:', current);
+        // Go in current step state
         this.props.setStep(current);
     };
 
     next() {
-        const current = this.props.currentStep + 1;
-        this.props.setStep(current);
+        // Go in next step
+        if (this.props.currentStep < MAX_STEP) {
+            const current = this.props.currentStep + 1;
+            this.props.setStep(current);
+        }
     }
 
     prev() {
-        const current = this.props.currentStep - 1;
-        this.props.setStep(current);
+        // Go in prev step
+        if (this.props.currentStep > 0) {
+            const current = this.props.currentStep - 1;
+            this.props.setStep(current);
+        }
     }
 
     executeBuilder() {
+        // Execute Builder to Execute the selected Pipeline
+        console.log('Builder: execute builder');
 
+        // If dataset file is used, it keeps only the filename
         let dataset = this.props.dataset ? this.props.dataset[0].name : null;
+
+        // If labels file is used, it keeps only the filename
         let labels = this.props.labels;
         if (this.props.labelsType === 'file')
             labels = labels[0].name;
 
+        // If pipeline file is used, it keeps only the filename
         let pipeline = this.props.pipeline ? this.props.pipeline[0].name : null;
 
+        let data = {
+            // DB step
+            is_db: this.props.isDB,
+            dataset: dataset,
+            db_url: this.props.dbUrl,
+            table: this.props.table,
+
+            // Modality step
+            validation: this.props.validation,
+            metric: this.props.metric,
+
+            labels_type: this.props.labelsType,
+            labels: labels,
+
+            // Model step
+            model: this.props.model,
+            transforms: this.props.transforms,
+            pipeline: pipeline,
+            run_db: this.props.runDB,
+        };
+
+        let url = `http://${config.url.API_URL}/api/msp/scenario/${this.props.mode}/`;
+
+
         axios
-            .post('http://' + config.url.API_URL +
-                `/api/msp/scenario/`,
-                {
-                    is_db: this.props.isDB,
-                    dataset: dataset,
-                    db_url: this.props.dbUrl,
-                    table: this.props.table,
-
-                    mode: this.props.mode,
-                    validation: this.props.validation,
-                    metric: this.props.metric,
-                    labels_type: this.props.labelsType,
-                    labels: labels,
-
-                    model: this.props.model,
-                    transforms: this.props.transforms,
-                    pipeline: pipeline,
-                    run_db: this.props.runDB,
-                }
-                ,
+            .post(url, data,
                 {
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 })
-
             .then(res => {
-                console.log('Upload dataset', res.data);
-                message.success('Processing complete!');
+                // Successfully pipeline execution
+                console.log('Builder: successful pipeline execution');
+                console.log(res.data);
+
+                message.success(`Pipeline ${this.props.mode} successful execution`);
                 this.props.openPopup('result', res.data['scenario_id'])
             })
             .catch(err => {
+                // Error in pipeline execution
+                console.error("Builder: error in pipeline execution");
                 console.error(err.data);
-                message.error('WRONG! ERROR!')
+
+                message.error('ERROR! Impossible execute pipeline')
             });
     }
 
     executeSimulation = () => {
-        console.log('perform simulation with batch size ',
-            this.props.batchSize, ' and batch number ', this.props.batchNumber);
+        // Execute Pipeline simulation
+        console.log('Builder: perform simulation');
+        console.log('Batch Size ', this.props.batchSize, ', and Batch Number ', this.props.batchNumber);
 
-        let labels = this.props.labelsType === 'column' ? this.props.labels : null;
+        // Get filename from pipeline file
         let pipeline = this.props.pipeline ? this.props.pipeline[0].name : null;
 
         axios
@@ -118,10 +141,8 @@ class Builder extends Component {
                 {
                     db_url: this.props.dbUrl,
                     table: this.props.table,
-                    model: this.props.model,
-                    transforms: this.props.transforms,
+
                     pipeline: pipeline,
-                    labels: labels,
                     batch_number: this.props.batchNumber,
                     batch_size: this.props.batchSize,
                 }
@@ -131,9 +152,10 @@ class Builder extends Component {
                         'Content-Type': 'application/json',
                     }
                 })
-
             .then(res => {
-                console.log('Upload dataset', res.data);
+                // Successfully pipeline simulation
+                console.log('Builder: successful pipeline simulation', res.data);
+
                 message.success('Processing complete!');
                 this.setState({
                     ml_results: res.data['ml_results'],
@@ -142,18 +164,23 @@ class Builder extends Component {
                 this.showModal()
             })
             .catch(err => {
+                // Error in pipeline simulation
+                console.error("Builder: error in pipeline simulation");
                 console.error(err);
-                message.error('WRONG! ERROR!');
+
+                message.error('ERROR! Impossible execute pipeline simulation');
             });
     };
 
     showModal = () => {
+        // Shoe simulation result modal
         this.setState({
             visible: true,
         });
     };
 
     handleOk = () => {
+        // Close simulation result modal
         this.setState({
             visible: false,
         });
@@ -163,20 +190,25 @@ class Builder extends Component {
         return (
             <Content style={{margin: '24px 16px 0'}}>
                 <div style={{padding: 24, background: '#fff', minHeight: 360}}>
-                    <Steps current={this.props.currentStep} onChange={this.onChange} status='process'>
+                    <Steps
+                        current={this.props.currentStep}
+                        onChange={this.onChange}
+                        status='process'
+                    >
                         {steps.map(item => (
                             <Step key={item.title} title={item.title}/>
                         ))}
                     </Steps>
+
                     <Divider/>
-                    <div style={{
-                        margin: '16px',
-                        paddingTop: '30px',
-                        minHeight: '270px',
-                        // border: 'solid',
-                        // borderColor: 'red',
-                        // textAlign: 'center',
-                    }}>
+
+                    <div
+                        style={{
+                            margin: '16px',
+                            paddingTop: '30px',
+                            minHeight: '270px',
+                        }}
+                    >
                         {steps[this.props.currentStep].title === 'Dataset' &&
                         <DatasetForm/>
                         }
@@ -187,6 +219,7 @@ class Builder extends Component {
                         <ModelForm/>
                         }
                     </div>
+
                     <div style={{marginTop: '24px'}}>
                         <Row type="flex" justify="space-between" align="middle">
                             <Col span={4} style={{textAlign: 'left'}}>
@@ -218,6 +251,7 @@ class Builder extends Component {
                         </Row>
                     </div>
                 </div>
+
                 <Modal
                     title="ML Library vs Query on DBMS"
                     visible={this.state.visible}

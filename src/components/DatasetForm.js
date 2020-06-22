@@ -1,18 +1,17 @@
 import React, {Component} from 'react'
-import axios from 'axios';
 import {connect} from 'react-redux';
+import axios from 'axios';
 
-import * as buildActions from '../store/actions/build';
 import {config} from '../Constants';
+import * as buildActions from '../store/actions/build';
 
 import {
+    Row, Col,
     Form,
     Input,
-    Upload,
     Button,
     Select,
-    AutoComplete,
-    Row, Col,
+    Upload,
     Alert,
     Spin,
     Icon,
@@ -22,13 +21,9 @@ import {
 
 class DatasetForm extends Component {
 
-    state = {};
-
     componentDidMount() {
         this.props.form.validateFields();
-        // this.get_file();
     }
-
 
     download_file = () => {
         axios
@@ -62,7 +57,7 @@ class DatasetForm extends Component {
                 let s = res.data;
                 let blob = new Blob([JSON.stringify(s, null, 2)],
                     {type: 'application/json'});
-                let file = new File([blob], 'test')
+                let file = new File([blob], 'test');
                 file['uid'] = 'rc-123456789';
 
                 this.props.datasetUpload([file]);
@@ -93,19 +88,19 @@ class DatasetForm extends Component {
     };
 
     onRemove = file => {
-        console.log('Remove file:', file);
+        console.log('Dataset: remove file', file);
         this.props.datasetRemoveUpload();
     };
 
     beforeUpload = file => {
-        console.log('Get file:', file);
+        console.log('Dataset: upload file', file);
         this.props.datasetUpload(file);
         return false;
     };
 
     checkDBConnection = e => {
         let dbUrl = this.props.form.getFieldValue('db_url');
-        console.log('Check connection:', dbUrl);
+        console.log('Dataset: check connection', dbUrl);
         if (dbUrl) {
             this.props.datasetCheckUrl(dbUrl)
         }
@@ -174,7 +169,7 @@ class DatasetForm extends Component {
                                                     //     placeholder="database url"
                                                     //     options={[{ value: 'mysql+pymysql://root:password@localhost/MLtoSQL' },]}
                                                     // />
-                                                    )}
+                                                )}
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}>
@@ -215,6 +210,7 @@ const mapStateToProps = state => {
     return {
         isDB: state.build.isDB,
         dataset: state.build.dataset,
+
         dbUrl: state.build.dbUrl,
         tables: state.build.tables,
         table: state.build.table,
@@ -229,6 +225,7 @@ const mapDispatchToProps = dispatch => {
     return {
         datasetUpload: (file) => dispatch(buildActions.datasetUpload(file)),
         datasetRemoveUpload: () => dispatch(buildActions.datasetRemoveUpload()),
+
         datasetCheckUrl: (url) => dispatch(buildActions.datasetCheckUrl(url)),
         datasetSelectTable: (url, table) => dispatch(buildActions.datasetSelectTable(url, table)),
     }

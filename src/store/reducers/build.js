@@ -2,15 +2,15 @@ import * as actionTypes from '../actions/actionTypes';
 import {updateObject} from '../utility';
 
 const initialState = {
+    error: null,
+    loading: false,
+
     isDB: null,
+    columns: null,
     dataset: null,
     dbUrl: null,
     tables: null,
     table: null,
-    columns: null,
-
-    error: null,
-    loading: false,
 
     mode: 'train',
     labelsType: null,
@@ -30,27 +30,39 @@ const initialState = {
 };
 
 // DATASET reducers
-const datasetStart = (state, action) => {
-    return updateObject(state, {error: null, loading: true});
+const datasetStart = (state) => {
+    return updateObject(state, {
+        error: null,
+        loading: true
+    });
 };
 
 const datasetUploadSuccess = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
+
+        // set dataset file
         dataset: action.dataset,
         columns: action.columns,
-        isDB: action.isDB,
+        isDB: false,
+
+        // remove database info
+        dbUrl: null,
+        tables: null,
+        table: null,
     });
 };
 
-const datasetRemoveUpload = (state, action) => {
+const datasetRemoveUpload = (state) => {
     return updateObject(state, {
         error: null,
         loading: false,
-        dataset: action.dataset,
-        columns: action.columns,
-        isDB: action.isDB,
+
+        // dataset rollback
+        dataset: null,
+        columns: null,
+        isDB: null,
     });
 };
 
@@ -58,9 +70,16 @@ const datasetCheckUrlSuccess = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
+
+        // set database connection
         dbUrl: action.dbUrl,
         tables: action.tables,
-        isDB: action.isDB,
+        isDB: true,
+
+        // remove dataset info
+        table: null,
+        columns: null,
+        dataset: null,
     });
 };
 
@@ -68,6 +87,8 @@ const datasetSelectTableSuccess = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
+
+        // set database table
         table: action.table,
         columns: action.columns,
     });
@@ -81,7 +102,7 @@ const datasetFail = (state, action) => {
 };
 
 // MODALITY reducers
-const modalityStart = (state, action) => {
+const modalityStart = (state) => {
     return updateObject(state, {error: null, loading: true});
 };
 
@@ -96,6 +117,7 @@ const modalitySetLabelsSuccess = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
+
         labelsType: action.labelsType,
         labels: action.labels
     });
@@ -120,7 +142,7 @@ const modalitySetMetric = (state, action) => {
 };
 
 // MODEL reducers
-const modelStart = (state, action) => {
+const modelStart = (state) => {
     return updateObject(state, {
         error: null,
         loading: true
@@ -210,27 +232,28 @@ const modelSetBatchSize = (state, action) => {
 };
 
 const builderSet = (state, action) => {
-    return updateObject(state, {
-        isDB: action.scenario.isDB,
-        dataset: action.scenario.dataset,
-        dbUrl: action.scenario.dbUrl,
-        tables: action.scenario.tables,
 
-        table: action.scenario.table,
-        columns: action.scenario.columns,
+    return updateObject(state, {
+        // isDB: action.scenario.isDB,
+        // dataset: action.scenario.dataset,
+        // dbUrl: action.scenario.dbUrl,
+        // tables: action.scenario.tables,
+
+        // table: action.scenario.table,
+        // columns: action.scenario.columns,
 
         error: null,
         loading: false,
 
-        mode: action.scenario.mode,
-        labelsType: action.scenario.labelsType,
-        labels: action.scenario.labels,
+        // mode: action.scenario.mode,
+        // labelsType: action.scenario.labelsType,
+        // labels: action.scenario.labels,
 
-        model: action.scenario.model,
-        transforms: action.scenario.transforms,
+        // model: action.scenario.model,
+        // transforms: action.scenario.transforms,
 
-        pipeline: action.scenario.pipeline,
-        runDB: action.scenario.runDB,
+        // pipeline: action.scenario.pipeline,
+        // runDB: action.scenario.runDB,
     });
 };
 
@@ -277,7 +300,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.DATASET_FAIL:
             return datasetFail(state, action);
         case actionTypes.MODALITY_START:
-            return modalityStart(state, action);
+            return modalityStart(state);
         case actionTypes.MODALITY_FAIL:
             return modalityFail(state, action);
         case actionTypes.MODALITY_SET_LABELS_SUCCESS:

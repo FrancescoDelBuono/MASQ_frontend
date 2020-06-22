@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux';
-
-import * as buildActions from '../store/actions/build';
+import axios from "axios";
 
 import {
     Form,
@@ -12,9 +11,10 @@ import {
     Slider,
     Select,
     Row, Col,
-    Icon,
+    Icon, Alert,
 } from 'antd';
-import axios from "axios";
+
+import * as buildActions from '../store/actions/build';
 import {config} from "../Constants";
 
 
@@ -30,41 +30,34 @@ class ModalityForm extends Component {
     }
 
     getMetricsTypes = () => {
+        // Get evaluation metric
         axios
-            .get('http://' + config.url.API_URL +
-                `/api/msp/mlmanager/`,
-                {'type': 'metric'},
-                {
-                    headers: {
-                        'content-type': 'application/json',
-                    }
-                }
-            )
+            .get(`http://${config.url.API_URL}/api/msp/mlmanager/?type=metric`)
             .then(res => {
-                console.log('get metric types success', res);
-                // let transforms = ['one_hot_encoding', 'normalization'];
-                this.setState({metricsList: res.data.metric_types});
+                // Successfully getting metrics
+                console.log('Modality: get metric types', res.data);
+                this.setState({metricsList: res.data['metric_types']});
             })
             .catch(err => {
+                // Error in getting available metrics
+                console.log('Modality: errror in getting metric types');
                 console.error(err.data);
             });
 
     };
 
     beforeLabelUpload = file => {
-        console.log('Get Label file:', file);
+        // Select file label type and upload label file
+        console.log('Modality: get label file', file);
         let labels_type = this.props.form.getFieldValue('labels_type');
         this.props.modalitySetLabels(labels_type, file);
         return false;
     };
 
     onChangeLabelsType = (event) => {
-        console.log(event)
-        console.log(typeof (event))
-        console.log(null)
-        console.log(event === null)
+        // Change label type
         if (event === null) {
-            console.log('set null')
+            // select no label type
             this.props.modalitySetLabels(null, null)
         }
     };
@@ -80,24 +73,45 @@ class ModalityForm extends Component {
             wrapperCol: {span: 14, offset: 6},
         };
 
+        let errorMessage = null;
+        if (this.props.error) {
+            errorMessage = (
+                <Alert
+                    message="Error"
+                    description={this.props.error}
+                    type="error"
+                    showIcon
+                    style={{
+                        marginBottom: '24px'
+                    }}
+                />)
+        }
 
         return (
             <div style={{
                 width: '100%',
                 height: '100%',
-                // border: 'solid'
             }}>
+                {errorMessage}
+
                 <Form {...formItemLayout}>
                     <Form.Item label="Mode: ">
                         <Radio.Group
-                            // size="large"
                             defaultValue={this.props.mode}
                             style={{width: '100%'}}
                             onChange={(e) => this.props.modalityChangeMode(e.target.value)}>
-                            <Radio.Button value="test"
-                                          style={{width: '30%', textAlign: 'center'}}>Test</Radio.Button>
-                            <Radio.Button value="train"
-                                          style={{width: '30%', textAlign: 'center'}}>Train</Radio.Button>
+                            <Radio.Button
+                                value="test"
+                                style={{width: '30%', textAlign: 'center'}}
+                            >
+                                Test
+                            </Radio.Button>
+                            <Radio.Button
+                                value="train"
+                                style={{width: '30%', textAlign: 'center'}}
+                            >
+                                Train
+                            </Radio.Button>
                         </Radio.Group>
                     </Form.Item>
 
@@ -123,8 +137,6 @@ class ModalityForm extends Component {
                                 {this.props.columns &&
                                 <Select.Option value="column">column</Select.Option>}
 
-                                {this.props.isDB &&
-                                <Select.Option value="table">table</Select.Option>}
                             </Select>
                         )}
                     </Form.Item>
@@ -132,11 +144,12 @@ class ModalityForm extends Component {
                     {
                         getFieldValue('labels_type') === 'file' &&
                         <Form.Item label="Upload Labels">
-                            <Upload fileList={this.props.labelsType === 'file' ? this.props.labels : []}
-                                    onRemove={(e) => {
-                                        return false
-                                    }}
-                                    beforeUpload={this.beforeLabelUpload}
+                            <Upload
+                                fileList={this.props.labelsType === 'file' ? this.props.labels : []}
+                                onRemove={() => {
+                                    return false
+                                }}
+                                beforeUpload={this.beforeLabelUpload}
                             >
                                 <Button>
                                     <Icon type="upload"/> Select File
@@ -148,33 +161,16 @@ class ModalityForm extends Component {
                     {
                         getFieldValue('labels_type') === 'column' &&
                         <Form.Item label="Column">
-                            <Select defaultValue={this.props.labelsType === 'column' ? this.props.labels : ""}
-                                    placeholder="Please select the column"
-                                    style={{width: 160}}
-                                    onChange={
-                                        (value) =>
-                                            this.props.modalitySetLabels(getFieldValue('labels_type'), value)
-                                    }
+                            <Select
+                                defaultValue={this.props.labelsType === 'column' ? this.props.labels : ""}
+                                placeholder="Please select the column"
+                                style={{width: 160}}
+                                onChange={
+                                    (value) =>
+                                        this.props.modalitySetLabels(getFieldValue('labels_type'), value)
+                                }
                             >
                                 {this.props.columns.map(x => {
-                                    return <Select.Option key={x} value={x}>{x}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    }
-
-                    {
-                        getFieldValue('labels_type') === 'table' &&
-                        <Form.Item label="Table">
-                            <Select defaultValue={this.props.labelsType === 'table' ? this.props.labels : ""}
-                                    placeholder="Please select the table"
-                                    style={{width: 160}}
-                                    onChange={
-                                        (value) =>
-                                            this.props.modalitySetLabels(getFieldValue('labels_type'), value)
-                                    }
-                            >
-                                {this.props.tables.map(x => {
                                     return <Select.Option key={x} value={x}>{x}</Select.Option>
                                 })}
                             </Select>
@@ -189,11 +185,10 @@ class ModalityForm extends Component {
                                     <Slider
                                         min={0}
                                         max={100}
+                                        value={typeof this.props.validation === 'number' ? this.props.validation : 0}
                                         onChange={(value) => {
                                             this.props.modalitySetValidation(value)
                                         }}
-                                        value={typeof this.props.validation === 'number' ?
-                                            this.props.validation : 0}
                                     />
                                 </Col>
                                 <Col span={4}>
@@ -201,9 +196,9 @@ class ModalityForm extends Component {
                                         min={0}
                                         max={100}
                                         style={{marginLeft: 16}}
-                                        value={this.props.validation}
                                         formatter={value => `${value}%`}
                                         parser={value => value.replace('%', '')}
+                                        value={this.props.validation}
                                         onChange={(value) => {
                                             this.props.modalitySetValidation(value)
                                         }}
@@ -214,11 +209,11 @@ class ModalityForm extends Component {
                     }
 
                     <Form.Item label="Metric Types">
-                        <Select placeholder="Select an evaluation metrics"
-                                // defaultValue={this.props.metric}
-                                onChange={(event) => this.props.modalitySetMetric(event)}
-                                style={{width: 160}}
-                                value={this.props.metric}
+                        <Select
+                            placeholder="Select an evaluation metrics"
+                            onChange={(event) => this.props.modalitySetMetric(event)}
+                            style={{width: 160}}
+                            value={this.props.metric}
                         >
                             {this.state.metricsList.map(x => {
                                 return <Select.Option key={x} value={x}>{x}</Select.Option>
@@ -236,15 +231,17 @@ const WrappedModalityForm = Form.create({name: 'modality_form'})(ModalityForm);
 
 const mapStateToProps = state => {
     return {
+        error: state.build.error,
+
         mode: state.build.mode,
-        validation: state.build.validation,
-        metric: state.build.metric,
         labelsType: state.build.labelsType,
         labels: state.build.labels,
 
-        columns: state.build.columns,
-        tables: state.build.tables,
+        validation: state.build.validation,
+        metric: state.build.metric,
+
         isDB: state.build.isDB,
+        columns: state.build.columns,
     }
 };
 

@@ -39,15 +39,15 @@ class App extends Component {
                             style={{
                                 border: '1px solid rgb(235, 237, 240)',
                             }}
-                            title="ML@SQL"
+                            title="MASQ"
                             subTitle={title}
                         />
                     </Header>
                     {this.props.item === 'history' && <History/>}
                     {this.props.item === 'pipeline' && <Builder/>}
-                    {/*{this.props.item === 'pipeline' && <Overview/>}*/}
+                    {this.props.item === 'pipeline' && <Overview/>}
                     <Popup/>
-                    {/*<Footer style={{textAlign: 'center'}}>Mmmmmmmmmmm....</Footer>*/}
+                    <Footer style={{textAlign: 'center'}}>....</Footer>
                 </Layout>
 
             </Layout>

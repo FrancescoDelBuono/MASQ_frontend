@@ -7,65 +7,18 @@ import * as navActions from "../store/actions/nav";
 import axios from "axios";
 import {config} from "../Constants";
 
-
 class ComparePopupModal extends React.Component {
 
     state = {
         scenarios: {},
-        columns: [{
-            title: 'index',
-            dataIndex: 'index',
-            key: 'index',
-        }],
-        dataSource: [
-            {
-                key: '1',
-                index: 'data',
-            },
-            {
-                key: '2',
-                index: 'table',
-            },
-            {
-                key: '3',
-                index: 'mode',
-            },
-            {
-                key: '4',
-                index: 'model',
-            },
-            {
-                key: '5',
-                index: 'transforms',
-            },
-            {
-                key: '6',
-                index: 'run db',
-            },
-            {
-                key: '7',
-                index: 'execution time',
-            },
-            {
-                key: '8',
-                index: 'throughput',
-            },
-            {
-                key: '9',
-                index: 'score',
-            },
-        ],
-    };
-
-    componentDidMount() {
-        console.log('componentDidMount ComparePopup: ' + this.props.idScenarios.join(', '));
+        columns: [],
+        dataSource: [],
     };
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('componentDidUpdate ComparePopup: ', this.props.idScenarios.join(', '));
         if (prevProps.idScenarios !== this.props.idScenarios) {
-            console.log('update compare scenarios list');
+            console.log('ComparePopup: update compare scenarios');
             this.setState({
                 scenarios: {},
                 columns: [{
@@ -115,7 +68,7 @@ class ComparePopupModal extends React.Component {
 
 
             this.props.idScenarios.forEach(x => {
-                console.log('get complete scenario: ' + x);
+                console.log('ComparePopup: get complete scenario ', x);
                 this.get_complete_scenario(x);
             })
         }
@@ -143,7 +96,7 @@ class ComparePopupModal extends React.Component {
             .get('http://' + config.url.API_URL +
                 `/api/msp/scenario/complete/?id=${id}`)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 let scenarios = this.state.scenarios;
                 scenarios[id] = res.data;
 
@@ -164,7 +117,7 @@ class ComparePopupModal extends React.Component {
                 dataSource[4][id] = res.data.transforms ? res.data.transforms.length : 0;
                 dataSource[5][id] = res.data.run_db ? 'QUERY' : 'ML';
                 dataSource[6][id] = res.data.execution_time;
-                dataSource[7][id] = res.data.throughput;;
+                dataSource[7][id] = res.data.throughput;
                 dataSource[8][id] = res.data.score;
 
                 this.setState({
@@ -182,92 +135,20 @@ class ComparePopupModal extends React.Component {
 
     render() {
 
-        // let scenarioComponents = Object.entries(this.state.scenarios).map(([key, value]) => (
-        //     <div style={{
-        //         margin: 15
-        //     }}>
-        //         <h3>Scenario {key}</h3>
-        //         <pre>
-        //             {
-        //                 value.is_db ?
-        //                     <Badge status="processing" text="DBMS"/>
-        //                     :
-        //                     <Badge status="warning" text="Dataset"/>
-        //             }{"\n"}
-        //             {
-        //                 value.is_db ?
-        //                     value.table
-        //                     :
-        //                     value.dataset
-        //             }{"\n"}
-        //             {value.mode}{"\n"}
-        //             {value.labels_type ?
-        //                 value.labels_type
-        //                 :
-        //                 'NO Labels'
-        //             }{"\n"}
-        //             {value.model}{"\n"}
-        //             {value.transforms ? value.transforms.length : 0} transforms{"\n"}
-        //             {
-        //                 value.run_db ?
-        //                     <Badge status="processing" text="query DBMS"/>
-        //                     :
-        //                     <Badge status="default" text="ML Library"/>
-        //             }{"\n"}
-        //         </pre>
-        //     </div>
-        // ));
-        //
-        // let executionTimeComponents = Object.entries(this.state.scenarios).map(([key, value]) => (
-        //     <div style={{margin: 15}}>
-        //         <pre>
-        //             Scenario {key}: {value.execution_time} sec{"\n"}
-        //         </pre>
-        //     </div>
-        // ));
-        //
-        // let throughputComponents = Object.entries(this.state.scenarios).map(([key, value]) => (
-        //     <div style={{margin: 15}}>
-        //         <pre>
-        //             Scenario {key}: {value.throughput}{"\n"}
-        //         </pre>
-        //     </div>
-        // ));
-        //
-        // let scoreComponents = Object.entries(this.state.scenarios).map(([key, value]) => (
-        //     <div style={{margin: 15}}>
-        //         <pre>
-        //             Scenario {key}: {value.score} sec{"\n"}
-        //         </pre>
-        //     </div>
-        // ));
-
         return (
             <Modal
-                centered
+                centered={true}
                 footer={null}
                 visible={this.props.showComparePopup}
                 onCancel={this.props.closeComparePopup}
                 width={'80%'}
-                bodyStyle={{
-                    minHeight: '60%',
-                    // minWidth: '70%'
-                }}>
-                {/*<div>*/}
-                {/*    <h1>Results</h1>*/}
-                {/*    {scenarioComponents}*/}
-                {/*    <h2>Execution Time</h2>*/}
-                {/*    {executionTimeComponents}*/}
-                {/*    <h2>Throughput</h2>*/}
-                {/*    {throughputComponents}*/}
-                {/*    <h2>Score</h2>*/}
-                {/*    {scoreComponents}*/}
-                {/*</div>*/}
+            >
                 <div style={{marginTop: 15}}>
                     <Table
                         columns={this.state.columns}
                         dataSource={this.state.dataSource}
                         pagination={false}
+                        scroll={{x: true}}
                     />
                 </div>
             </Modal>
