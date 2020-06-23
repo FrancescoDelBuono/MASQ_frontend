@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="995d4ad0-adc2-4869-8da4-3e160b9f0cf7" name="Default Changelist" comment="fix bug History.js">
+    <list default="true" id="995d4ad0-adc2-4869-8da4-3e160b9f0cf7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/MASQ_Pipeline_demo.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/history_all.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/history_compare.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/pipeline_test_query.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/pipeline_test_results.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/pipeline_test_simulation.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/pipeline_train_deploy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/image/pipeline_train_model.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ComparePopup.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DatasetForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DatasetForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ModalityForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ModalityForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ModelForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ModelForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ScenarioCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ScenarioCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Builder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Builder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/ComparePopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/ComparePopup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/ExecutionPopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/ExecutionPopup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/build.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/reducers/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/build.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +52,13 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\delbu\Projects\WebProjects\ml2sql_frontend\src\data\img" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\delbu\Projects\WebProjects\ml2sql_frontend\src\data" />
       <recent name="C:\Users\delbu\Projects\WebProjects\ml2sql_frontend\src\components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\delbu\Projects\WebProjects\ml2sql_frontend\image" />
+      <recent name="C:\Users\delbu\Projects\WebProjects\ml2sql_frontend\src\data\img" />
     </key>
   </component>
   <component name="RunManager" selected="npm.npm start">
@@ -111,7 +109,8 @@
       <workItem from="1592495976876" duration="594000" />
       <workItem from="1592554529089" duration="8500000" />
       <workItem from="1592584208550" duration="1099000" />
-      <workItem from="1592809726223" duration="2753000" />
+      <workItem from="1592809726223" duration="4897000" />
+      <workItem from="1592838992002" duration="4829000" />
     </task>
     <task id="LOCAL-00001" summary="raw frontend">
       <created>1581075267077</created>
@@ -155,11 +154,31 @@
       <option name="project" value="LOCAL" />
       <updated>1584008299457</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix style">
+      <created>1592831502454</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1592831502455</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -168,37 +187,47 @@
     <MESSAGE value="finish builder" />
     <MESSAGE value="insert api rest" />
     <MESSAGE value="fix bug History.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug History.js" />
+    <MESSAGE value="fix style" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix style" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1592831145082">
+    <state x="530" y="216" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1592924039556">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831145082" />
-    <state width="1515" height="271" key="GridCell.Tab.0.bottom" timestamp="1592831135513">
+    <state x="530" y="216" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1592924039556" />
+    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1592831500998">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831500998" />
+    <state width="1515" height="271" key="GridCell.Tab.0.bottom" timestamp="1592834097190">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1899" height="361" key="GridCell.Tab.0.bottom/0.0.1536.824/0.-1080.1920.1040@0.-1080.1920.1040" timestamp="1592580589038" />
-    <state width="1515" height="271" key="GridCell.Tab.0.bottom/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831135513" />
+    <state width="1515" height="271" key="GridCell.Tab.0.bottom/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592834097190" />
     <state width="1515" height="271" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1592589459035" />
-    <state width="1515" height="271" key="GridCell.Tab.0.center" timestamp="1592831135513">
+    <state width="1515" height="271" key="GridCell.Tab.0.center" timestamp="1592834097190">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1899" height="361" key="GridCell.Tab.0.center/0.0.1536.824/0.-1080.1920.1040@0.-1080.1920.1040" timestamp="1592580589038" />
-    <state width="1515" height="271" key="GridCell.Tab.0.center/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831135513" />
+    <state width="1515" height="271" key="GridCell.Tab.0.center/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592834097190" />
     <state width="1515" height="271" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1592589459035" />
-    <state width="1515" height="271" key="GridCell.Tab.0.left" timestamp="1592831135512">
+    <state width="1515" height="271" key="GridCell.Tab.0.left" timestamp="1592834097190">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1899" height="361" key="GridCell.Tab.0.left/0.0.1536.824/0.-1080.1920.1040@0.-1080.1920.1040" timestamp="1592580589038" />
-    <state width="1515" height="271" key="GridCell.Tab.0.left/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831135512" />
+    <state width="1515" height="271" key="GridCell.Tab.0.left/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592834097190" />
     <state width="1515" height="271" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1592589459035" />
-    <state width="1515" height="271" key="GridCell.Tab.0.right" timestamp="1592831135513">
+    <state width="1515" height="271" key="GridCell.Tab.0.right" timestamp="1592834097190">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1899" height="361" key="GridCell.Tab.0.right/0.0.1536.824/0.-1080.1920.1040@0.-1080.1920.1040" timestamp="1592580589038" />
-    <state width="1515" height="271" key="GridCell.Tab.0.right/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831135513" />
+    <state width="1515" height="271" key="GridCell.Tab.0.right/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592834097190" />
     <state width="1515" height="271" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1592589459035" />
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1592927130769">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831630701" />
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1592927130769" />
     <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1592302760241">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

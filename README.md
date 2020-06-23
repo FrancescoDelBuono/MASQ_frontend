@@ -1,68 +1,66 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MASQ frontend
+The frontend is part of the _MASQ Project_. The frontend enables users to interact with the [MASQ platform](https://github.com/FrancescoDelBuono/MASQ).
 
-## Available Scripts
+More information about the [MASQ platform](https://github.com/FrancescoDelBuono/MASQ) can be found in the corresponding repository.
 
-In the project directory, you can run:
+The MASQ frontend is supplied under MIT License. You can use and extend the frontend to interact with the MASQ platform.
 
-### `yarn start`
+## Prerequisites
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Install Node JS
+Refer to https://nodejs.org/en/ to install nodejs
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Cloning and Running the Application in local
 
-### `yarn test`
+Clone the project into local
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Install all the npm packages. Go into the project folder and type the following command to install all npm packages
 
-### `yarn build`
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In order to run the application type the following command
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```bash
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The Application Runs on **localhost:3000**
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Screenshot
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Pipeline
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The MASQ pipeline is composed of three step:
 
-## Learn More
+1. **Dataset selection**: the user can both upload dataset (csv format) and insert DBMS connection detail
+2. **Modality selection**: selection between train and test step with label definition
+3. **ML pipeline construction**: in training phase the user build the desired pipeline with transforms and model, 
+instead in testing phase the user upload the fitted pipeline and can decide to generate and execute the ML query on selected DBMS
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Train
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ML pipeline construction
+![pipeline_train_model](image/pipeline_train_model.png)
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+ML pipeline train and deploy
+![pipeline_train_deploy](image/pipeline_train_deploy.png)
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+#### Test
 
-### Making a Progressive Web App
+ML pipeline testing step
+![pipeline_test_query](image/pipeline_test_query.png)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
+Simulation estimated execution time between query and ml library 
+![pipeline_test_simulation](image/pipeline_test_simulation.png)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Deployment
+Query generation 
+![pipeline_train_deploy](image/pipeline_test_results.png)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
