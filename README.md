@@ -44,33 +44,33 @@ instead in testing phase the user upload the fitted pipeline and can decide to g
 #### Train
 
 ML pipeline construction
-![pipeline_train_model](image/pipeline_train_model.png =250x)
+![pipeline_train_model](image/pipeline_train_model.png)
 
 
 ML pipeline train and deploy
-![pipeline_train_deploy](image/pipeline_train_deploy.png =250x)
+![pipeline_train_deploy](image/pipeline_train_deploy.png)
 
 
 #### Test
 
 ML pipeline testing step
-![pipeline_test_query](image/pipeline_test_query.png =250x)
+![pipeline_test_query](image/pipeline_test_query.png)
 
 
 Simulation estimated execution time between query and ml library 
-![pipeline_test_simulation](image/pipeline_test_simulation.png =250x)
+![pipeline_test_simulation](image/pipeline_test_simulation.png)
 
 
 Query generation 
-![pipeline_train_deploy](image/pipeline_test_results.png =250x)
+![pipeline_train_deploy](image/pipeline_test_results.png)
 
 
 #### History
 
-![history_all](image/history_all.png =250x)
+![history_all](image/history_all.png)
 
 
 Comparison 
-![history_compare](image/history_compare.png =250x)
+![history_compare](image/history_compare.png)
 
 
