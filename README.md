@@ -34,7 +34,7 @@ The Application Runs on **localhost:3000**
 
 ### Pipeline
 
-The MASQ pipeline is composed of three step:
+The MASQ pipeline is composed of three steps:
 
 1. **Dataset selection**: the user can both upload dataset (csv format) and insert DBMS connection detail
 2. **Modality selection**: selection between train and test step with label definition
@@ -44,33 +44,33 @@ instead in testing phase the user upload the fitted pipeline and can decide to g
 #### Train
 
 ML pipeline construction
-![pipeline_train_model](image/pipeline_train_model.png)
+![pipeline_train_model](image/pipeline_train_model.png =250x)
 
 
 ML pipeline train and deploy
-![pipeline_train_deploy](image/pipeline_train_deploy.png)
+![pipeline_train_deploy](image/pipeline_train_deploy.png =250x)
 
 
 #### Test
 
 ML pipeline testing step
-![pipeline_test_query](image/pipeline_test_query.png)
+![pipeline_test_query](image/pipeline_test_query.png =250x)
 
 
 Simulation estimated execution time between query and ml library 
-![pipeline_test_simulation](image/pipeline_test_simulation.png)
+![pipeline_test_simulation](image/pipeline_test_simulation.png =250x)
 
 
 Query generation 
-![pipeline_train_deploy](image/pipeline_test_results.png)
+![pipeline_train_deploy](image/pipeline_test_results.png =250x)
 
 
 #### History
 
-![history_all](image/history_all.png)
+![history_all](image/history_all.png =250x)
 
 
 Comparison 
-![history_compare](image/history_compare.png)
+![history_compare](image/history_compare.png =250x)
 
 
