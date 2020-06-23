@@ -64,3 +64,13 @@ Simulation estimated execution time between query and ml library
 Query generation 
 ![pipeline_train_deploy](image/pipeline_test_results.png)
 
+
+#### History
+
+![history_all](image/history_all.png)
+
+
+Comparison 
+![history_compare](image/history_compare.png)
+
+

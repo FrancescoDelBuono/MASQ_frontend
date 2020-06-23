@@ -2,15 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="995d4ad0-adc2-4869-8da4-3e160b9f0cf7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/MASQ_Pipeline_demo.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/history_all.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/history_compare.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/pipeline_test_query.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/pipeline_test_results.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/pipeline_test_simulation.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/pipeline_train_deploy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/pipeline_train_model.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -110,7 +101,7 @@
       <workItem from="1592554529089" duration="8500000" />
       <workItem from="1592584208550" duration="1099000" />
       <workItem from="1592809726223" duration="4897000" />
-      <workItem from="1592838992002" duration="4829000" />
+      <workItem from="1592838992002" duration="4955000" />
     </task>
     <task id="LOCAL-00001" summary="raw frontend">
       <created>1581075267077</created>
@@ -161,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592831502455</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="insert LICENSE and README">
+      <created>1592927147230</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1592927147231</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,17 +186,19 @@
     <MESSAGE value="insert api rest" />
     <MESSAGE value="fix bug History.js" />
     <MESSAGE value="fix style" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix style" />
+    <MESSAGE value="insert LICENSE and README" />
+    <option name="LAST_COMMIT_MESSAGE" value="insert LICENSE and README" />
   </component>
   <component name="WindowStateProjectService">
     <state x="530" y="216" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1592924039556">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="530" y="216" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1592924039556" />
-    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1592831500998">
+    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1592927146637">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831500998" />
+    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1592927146637" />
     <state width="1515" height="271" key="GridCell.Tab.0.bottom" timestamp="1592834097190">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -223,11 +223,11 @@
     <state width="1899" height="361" key="GridCell.Tab.0.right/0.0.1536.824/0.-1080.1920.1040@0.-1080.1920.1040" timestamp="1592580589038" />
     <state width="1515" height="271" key="GridCell.Tab.0.right/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592834097190" />
     <state width="1515" height="271" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1592589459035" />
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1592927130769">
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1592927149912">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824/0.-1080.1920.1040@0.0.1536.824" timestamp="1592831630701" />
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1592927130769" />
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1592927149912" />
     <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1592302760241">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
