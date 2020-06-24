@@ -28,11 +28,7 @@ npm start
 
 The Application Runs on **localhost:3000**
 
-
-## Screenshot
-
-
-### Pipeline
+## Pipeline
 
 The MASQ pipeline is composed of three steps:
 
@@ -40,6 +36,8 @@ The MASQ pipeline is composed of three steps:
 2. **Modality selection**: selection between train and test step with label definition
 3. **ML pipeline construction**: in training phase the user build the desired pipeline with transforms and model, 
 instead in testing phase the user upload the fitted pipeline and can decide to generate and execute the ML query on selected DBMS
+
+## Screenshot
 
 #### Train
 
