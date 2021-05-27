@@ -58,6 +58,14 @@ class Overview extends Component {
                                     <Badge status="default" text="No"/>
                             }
                         </Descriptions.Item>
+                        <Descriptions.Item label="Optimizer">
+                            {
+                                this.props.optimizer ?
+                                    <Badge status="processing" text="True"/>
+                                    :
+                                    <Badge status="default" text="False"/>
+                            }
+                        </Descriptions.Item>
                         <Descriptions.Item
                             label="Model">{this.props.model ? this.props.model : 'no model selected'}</Descriptions.Item>
                         <Descriptions.Item label="Transforms">
@@ -94,6 +102,7 @@ const mapStateToProps = state => {
         transforms: state.build.transforms,
         pipeline: state.build.pipeline,
         runDB: state.build.runDB,
+        optimizer: state.build.optimizer,
 
     }
 };

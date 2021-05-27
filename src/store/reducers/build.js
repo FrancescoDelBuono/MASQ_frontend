@@ -24,6 +24,7 @@ const initialState = {
     transforms: [],
     pipeline: null,
     runDB: false,
+    optimizer: false,
 
     batchNumber: 5,
     batchSize: 1000,
@@ -219,6 +220,12 @@ const modelChangeRunDB = (state, action) => {
     });
 };
 
+const modelChangeOptimizer = (state, action) => {
+    return updateObject(state, {
+        optimizer: action.optimizer,
+    });
+};
+
 const modelSetBatchNumber = (state, action) => {
     return updateObject(state, {
         batchNumber: action.batchNumber,
@@ -265,6 +272,7 @@ const builderDeploy = (state, action) => {
 
     let isDB = state.isDB ? state.isDB : null;
     let runDB = state.isDB;
+    let optimizer = state.optimizer;
 
     return updateObject(state, {
 
@@ -280,6 +288,7 @@ const builderDeploy = (state, action) => {
 
         pipeline: action.pipeline,
         runDB: runDB,
+        optimizer: optimizer,
 
     });
 };
@@ -333,6 +342,8 @@ const reducer = (state = initialState, action) => {
             return modelRemovePipeline(state, action);
         case actionTypes.MODEL_CHANGE_RUN_DB:
             return modelChangeRunDB(state, action);
+        case actionTypes.MODEL_CHANGE_OPTIMIZER:
+            return modelChangeOptimizer(state, action);
 
         case actionTypes.MODEL_SET_BATCH_NUMBER:
             return modelSetBatchNumber(state, action);

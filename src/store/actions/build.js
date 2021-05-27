@@ -388,6 +388,13 @@ export const modelChangeRunDB = (runDB) => {
     }
 };
 
+export const modelChangeOptimizer = (optimizer) => {
+    return {
+        type: actionTypes.MODEL_CHANGE_OPTIMIZER,
+        optimizer: optimizer,
+    }
+};
+
 export const modelSetBatchNumber = (batchNumber) => {
     return {
         type: actionTypes.MODEL_SET_BATCH_NUMBER,

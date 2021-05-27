@@ -53,14 +53,18 @@ class ComparePopupModal extends React.Component {
                     },
                     {
                         key: '7',
-                        index: 'execution time',
+                        index: 'optimizer',
                     },
                     {
                         key: '8',
-                        index: 'throughput',
+                        index: 'execution time',
                     },
                     {
                         key: '9',
+                        index: 'throughput',
+                    },
+                    {
+                        key: '10',
                         index: 'score',
                     },
                 ],
@@ -116,9 +120,10 @@ class ComparePopupModal extends React.Component {
                 dataSource[3][id] = res.data.model;
                 dataSource[4][id] = res.data.transforms ? res.data.transforms.length : 0;
                 dataSource[5][id] = res.data.run_db ? 'QUERY' : 'ML';
-                dataSource[6][id] = res.data.execution_time;
-                dataSource[7][id] = res.data.throughput;
-                dataSource[8][id] = res.data.score;
+                dataSource[6][id] = res.data.optimizer ? 'True' : 'False';
+                dataSource[7][id] = res.data.execution_time;
+                dataSource[8][id] = res.data.throughput;
+                dataSource[9][id] = res.data.score;
 
                 this.setState({
                     scenarios: scenarios,

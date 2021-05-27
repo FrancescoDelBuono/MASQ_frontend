@@ -252,6 +252,20 @@ class ModelForm extends Component {
                     {
                         this.props.mode === 'test' &&
                         this.props.isDB &&
+                        !this.props.isSimulation &&
+                        <Form.Item label="Optimizer">
+                            <Switch
+                                checkedChildren={<Icon type="check"/>}
+                                unCheckedChildren={<Icon type="close"/>}
+                                onChange={(val) => this.props.modelChangeOptimizer(val)}
+                                defaultChecked={this.props.optimizer}
+                            />
+                        </Form.Item>
+                    }
+
+                    {
+                        this.props.mode === 'test' &&
+                        this.props.isDB &&
                         <div>
                             <Form.Item label='Simulation'>
                                 <Checkbox
@@ -301,6 +315,7 @@ const mapStateToProps = state => {
         labelsType: state.build.labelsType,
         labels: state.build.labels,
 
+        optimizer: state.build.optimizer,
 
         modelsList: state.build.modelsList,
         transformsList: state.build.transformsList,
@@ -325,6 +340,7 @@ const mapDispatchToProps = dispatch => {
         modelUploadPipeline: (pipeline) => dispatch(buildActions.modelUploadPipeline(pipeline)),
         modelRemovePipeline: () => dispatch(buildActions.modelRemovePipeline()),
         modelChangeRunDB: (runDB) => dispatch(buildActions.modelChangeRunDB(runDB)),
+        modelChangeOptimizer: (optimizer) => dispatch(buildActions.modelChangeOptimizer(optimizer)),
         modelSetBatchNumber: (batchNumber) => dispatch(buildActions.modelSetBatchNumber(batchNumber)),
         modelSetBatchSize: (batchSize) => dispatch(buildActions.modelSetBatchSize(batchSize)),
 

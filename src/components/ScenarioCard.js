@@ -66,6 +66,12 @@ const ScenarioCard = (props) => {
                                 :
                                 <Badge status="default" text="ML Library"/>
                         }{"\n"}
+                        {
+                            props.scenario.optimizer ?
+                                <Badge status="processing" text="Optimization"/>
+                                :
+                                <Badge status="default" text="No optimization"/>
+                        }{"\n"}
                     </pre>
                 }
             />

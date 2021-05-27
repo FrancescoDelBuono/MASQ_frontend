@@ -98,6 +98,7 @@ class Builder extends Component {
             transforms: this.props.transforms,
             pipeline: pipeline,
             run_db: this.props.runDB,
+            optimizer: this.props.optimizer,
         };
 
         let url = `http://${config.url.API_URL}/api/msp/scenario/${this.props.mode}/`;
@@ -288,6 +289,7 @@ const mapStateToProps = state => {
         transforms: state.build.transforms,
         pipeline: state.build.pipeline,
         runDB: state.build.runDB,
+        optimizer: state.build.optimizer,
 
         batchNumber: state.build.batchNumber,
         batchSize: state.build.batchSize,

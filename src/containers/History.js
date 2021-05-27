@@ -61,6 +61,7 @@ class History extends Component {
                         transforms: item.transforms,
                         model: item.model,
                         runDB: item.run_db,
+                        optimizer: item.optimizer,
                         pipeline: item.pipeline,
                     })
                 });
