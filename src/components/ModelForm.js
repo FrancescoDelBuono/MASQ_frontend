@@ -61,7 +61,7 @@ class ModelForm extends Component {
         });
     };
 
-    get_pipeline = (file) => {
+    getPipeline = (file) => {
         axios
             .get('http://' + config.url.API_URL +
                 `/api/msp/pipeline/${file.name}/`)
@@ -78,6 +78,7 @@ class ModelForm extends Component {
     };
 
     render() {
+
         const {getFieldDecorator, getFieldValue} = this.props.form;
 
         const formItemLayout = {
@@ -135,7 +136,12 @@ class ModelForm extends Component {
                     >
                         {this.props.columns &&
                         this.props.columns.map(x => {
-                            return <Select.Option key={x} value={x}>{x}</Select.Option>
+                            let disabled = false;
+                            if (this.props.labelsType === 'column' && this.props.labels === x)
+                                disabled = true;
+
+                            return <Select.Option key={x} value={x} disabled={disabled}>{x}</Select.Option>
+
                         })}
                     </Select>
                 )}
@@ -218,7 +224,7 @@ class ModelForm extends Component {
                                     }}
                                     beforeUpload={file => {
                                         this.props.modelUploadPipeline(file);
-                                        this.get_pipeline(file);
+                                        this.getPipeline(file);
                                         return false;
                                     }}>
                                 <Button>
@@ -227,6 +233,7 @@ class ModelForm extends Component {
                             </Upload>
                         </Form.Item>
                     }
+
 
                     {
                         this.props.mode === 'test' &&
@@ -340,10 +347,9 @@ const mapDispatchToProps = dispatch => {
         modelUploadPipeline: (pipeline) => dispatch(buildActions.modelUploadPipeline(pipeline)),
         modelRemovePipeline: () => dispatch(buildActions.modelRemovePipeline()),
         modelChangeRunDB: (runDB) => dispatch(buildActions.modelChangeRunDB(runDB)),
-        modelChangeOptimizer: (optimizer) => dispatch(buildActions.modelChangeOptimizer(optimizer)),
         modelSetBatchNumber: (batchNumber) => dispatch(buildActions.modelSetBatchNumber(batchNumber)),
         modelSetBatchSize: (batchSize) => dispatch(buildActions.modelSetBatchSize(batchSize)),
-
+        modelChangeOptimizer: (optimizer) => dispatch(buildActions.modelChangeOptimizer(optimizer)),
         setIsSimulation: (isSimulation) => dispatch(navActions.setIsSimulation(isSimulation)),
     }
 };

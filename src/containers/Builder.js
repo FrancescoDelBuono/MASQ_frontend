@@ -79,6 +79,10 @@ class Builder extends Component {
         // If pipeline file is used, it keeps only the filename
         let pipeline = this.props.pipeline ? this.props.pipeline[0].name : null;
 
+        console.log('DFGHJBHBHBV');
+        console.log(this.props.model);
+        console.log(this.props.transforms);
+
         let data = {
             // DB step
             is_db: this.props.isDB,
@@ -133,6 +137,11 @@ class Builder extends Component {
         console.log('Builder: perform simulation');
         console.log('Batch Size ', this.props.batchSize, ', and Batch Number ', this.props.batchNumber);
 
+        // If labels file is used, it keeps only the filename
+        let labels = this.props.labels;
+        if (this.props.labelsType === 'file')
+            labels = labels[0].name;
+
         // Get filename from pipeline file
         let pipeline = this.props.pipeline ? this.props.pipeline[0].name : null;
 
@@ -142,6 +151,9 @@ class Builder extends Component {
                 {
                     db_url: this.props.dbUrl,
                     table: this.props.table,
+
+                    labels_type: this.props.labelsType,
+                    labels: labels,
 
                     pipeline: pipeline,
                     batch_number: this.props.batchNumber,

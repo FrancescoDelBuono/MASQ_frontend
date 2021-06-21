@@ -16,7 +16,7 @@ const {Header, Footer} = Layout;
 
 class App extends Component {
     render() {
-        let title = "";
+        let title;
         switch (this.props.item) {
             case 'pipeline':
                 title = 'Builder';
@@ -25,7 +25,7 @@ class App extends Component {
                 title = 'History';
                 break;
             default:
-                title = 'ML@DB';
+                title = 'MASQ';
                 break;
         }
 

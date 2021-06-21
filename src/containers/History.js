@@ -40,10 +40,8 @@ class History extends Component {
             .get('http://' + config.url.API_URL +
                 `/api/msp/scenario/list/`)
             .then(res => {
-                // console.log(res.data);
                 let array = res.data;
                 array.forEach(function (item, index) {
-                    // console.log(item, index);
                     scenarios.push({
                         id: item.id,
                         isDB: item.is_db,
@@ -65,6 +63,7 @@ class History extends Component {
                         pipeline: item.pipeline,
                     })
                 });
+                // console.log(scenarios);
                 this.setState({scenarios});
             })
             .catch(err => {

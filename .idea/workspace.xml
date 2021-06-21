@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="49500c4d-bdba-42d3-80fd-e68229284486" name="Default Changelist" comment="fix readme">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ModelForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ModelForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ScenarioCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ScenarioCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Builder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Builder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/ComparePopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/ComparePopup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Overview.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Overview.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/actionTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/build.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/reducers/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/build.js" afterDir="false" />
-    </list>
+    <list default="true" id="49500c4d-bdba-42d3-80fd-e68229284486" name="Default Changelist" comment="fix readme" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,6 +46,7 @@
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -80,9 +69,14 @@
         <script value="start" />
       </scripts>
       <node-interpreter value="project" />
+      <package-manager value="npm" />
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.Debug Application" />
+      <item itemvalue="npm.npm start" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -124,6 +118,7 @@
       <workItem from="1621412158301" duration="995000" />
       <workItem from="1621499136147" duration="7000" />
       <workItem from="1622012060903" duration="6262000" />
+      <workItem from="1624280949948" duration="119000" />
     </task>
     <task id="LOCAL-00001" summary="raw frontend">
       <created>1581075267077</created>
@@ -217,11 +212,5 @@
     <MESSAGE value="insert LICENSE and README" />
     <MESSAGE value="fix readme" />
     <option name="LAST_COMMIT_MESSAGE" value="fix readme" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="779" y="311" width="424" height="491" key="FileChooserDialogImpl" timestamp="1621412192402">
-      <screen x="72" y="27" width="1848" height="1053" />
-    </state>
-    <state x="779" y="311" width="424" height="491" key="FileChooserDialogImpl/72.27.1848.1053@72.27.1848.1053" timestamp="1621412192402" />
   </component>
 </project>
