@@ -39,7 +39,7 @@ const ScenarioCard = (props) => {
             <Card.Meta
                 title={'Scenario ' + props.scenario.id}
                 description={
-                    <pre style={{height: '160px'}}>
+                    <pre style={{height: '180px'}}>
                         {
                             props.scenario.isDB ?
                                 <Badge status="processing" text="DBMS"/>

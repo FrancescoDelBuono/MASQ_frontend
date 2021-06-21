@@ -56,7 +56,8 @@ class ModelForm extends Component {
                     return key;
                 });
 
-                this.props.modelSetTransforms(transforms)
+                console.log(transforms);
+                this.props.modelSetTransforms(transforms);
             }
         });
     };
@@ -125,14 +126,17 @@ class ModelForm extends Component {
                         {
                             required: true,
                             whitespace: true,
-                            message: "Please select transform or delete this field.",
+                            message: "Please select column or delete this field.",
+                            type: 'array',
                         },
                     ],
-                    initialValue: (k in this.state.transformsInitialState) ? this.state.transformsInitialState[k]['column'] : '',
+                    initialValue: (k in this.state.transformsInitialState) ? this.state.transformsInitialState[k]['column'] : [],
                 })(
                     <Select
-                        placeholder="Column"
+                        mode="multiple"
+                        placeholder="Columns"
                         style={{width: '40%', marginRight: 8}}
+                        allowClear
                     >
                         {this.props.columns &&
                         this.props.columns.map(x => {
@@ -165,7 +169,7 @@ class ModelForm extends Component {
                     {k['transform_type']}
                 </span>
                 <span style={{width: '40%', marginRight: 8}}>
-                    {k['transform_column']}
+                    {k['transform_column'].join(" ")}
                 </span>
             </Form.Item>
         ));
